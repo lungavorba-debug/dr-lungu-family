@@ -64,7 +64,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
+      '@medscreen/types': path.resolve(workspaceRoot, 'packages/types/src/index.ts'),
+      '@medscreen/config': path.resolve(workspaceRoot, 'packages/config/src/index.ts'),
       '@medscreen/shared': path.resolve(workspaceRoot, 'packages/shared/src/index.ts'),
+      '@medscreen/ui': path.resolve(workspaceRoot, 'packages/ui/src/index.ts'),
     },
   },
   server: {
