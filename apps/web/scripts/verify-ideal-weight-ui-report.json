@@ -1,0 +1,26 @@
+{
+  "fieldVisible": true,
+  "labelText": "Greutate ideală (calculată automat)",
+  "valueText": "75.2 kg",
+  "displaysValue": true,
+  "heightUpdateWorks": true,
+  "sexUpdateWorks": false,
+  "bmiVisible": true,
+  "bmiValue": "27.78",
+  "hiddenByCss": false,
+  "outsideLayout": false,
+  "renderedButEmpty": false,
+  "componentMounted": true,
+  "inViewport": true,
+  "computedStyle": {
+    "display": "block",
+    "visibility": "visible",
+    "opacity": "1",
+    "height": "98px",
+    "width": "440px"
+  },
+  "pageUrl": "http://localhost:5174/screening/measurements",
+  "bodyContainsIdealWeightLabel": true,
+  "distHasIdealWeight": true,
+  "errors": []
+}

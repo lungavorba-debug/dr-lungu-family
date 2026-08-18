@@ -1,0 +1,59 @@
+# syntax=docker/dockerfile:1
+
+FROM node:20-alpine AS base
+WORKDIR /app
+
+# ─── Dependencies (skip browser download on Alpine — installed in production) ─
+FROM base AS deps
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+COPY package.json package-lock.json* ./
+COPY apps/api/package.json ./apps/api/
+COPY packages/config/package.json ./packages/config/
+COPY packages/types/package.json ./packages/types/
+COPY packages/shared/package.json ./packages/shared/
+RUN npm ci --workspace=@medscreen/api --include-workspace-root
+
+# ─── Build ────────────────────────────────────────────────
+FROM base AS build
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build -w @medscreen/types
+RUN npm run build -w @medscreen/config
+RUN npm run build -w @medscreen/shared
+RUN npm run build -w @medscreen/api
+
+# ─── Production (Debian — required for Playwright Chromium) ─
+FROM node:20-bookworm-slim AS production
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    rm -rf /var/lib/apt/lists/* && \
+    addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 medscreen && \
+    mkdir -p /app/storage /ms-playwright && \
+    chown -R medscreen:nodejs /app/storage /ms-playwright
+
+COPY --from=build /app/apps/api/dist ./apps/api/dist
+COPY --from=build /app/apps/api/package.json ./apps/api/
+COPY --from=build /app/packages/shared/dist ./packages/shared/dist
+COPY --from=build /app/packages/shared/package.json ./packages/shared/
+COPY --from=build /app/packages/config/dist ./packages/config/dist
+COPY --from=build /app/packages/config/package.json ./packages/config/
+COPY --from=build /app/packages/types/dist ./packages/types/dist
+COPY --from=build /app/packages/types/package.json ./packages/types/
+COPY --from=deps /app/node_modules ./node_modules
+COPY package.json ./
+
+# Playwright Chromium + OS libraries for headless PDF rendering
+RUN npx playwright install-deps chromium && \
+    npx playwright install chromium && \
+    chown -R medscreen:nodejs /ms-playwright
+
+USER medscreen
+EXPOSE 3001
+
+CMD ["node", "apps/api/dist/server.js"]

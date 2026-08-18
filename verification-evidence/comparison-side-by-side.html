@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Participant Report — Design vs Generated PDF</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #eef1f5; margin: 0; padding: 24px; color: #252a2e; }
+    h1 { text-align: center; font-size: 18px; margin-bottom: 8px; }
+    p.lead { text-align: center; color: #6b7280; font-size: 13px; margin-bottom: 24px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1600px; margin: 0 auto; }
+    figure { margin: 0; background: #fff; border: 1px solid #e4eaf0; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,61,91,.06); }
+    figcaption { padding: 12px 16px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #003d5b; border-top: 1px solid #e4eaf0; background: #f8fafc; }
+    img { width: 100%; display: block; }
+  </style>
+</head>
+<body>
+  <h1>Participant Report — Approved Design vs Generated PDF</h1>
+  <p class="lead">Verification pack · Sprint Participant Report Final · Hypertension scenario · A4</p>
+  <div class="grid">
+    <figure>
+      <img src="01-approved-design-mockup.png" alt="Approved HTML mockup" />
+      <figcaption>Approved design (Sprint 12.2 HTML mockup)</figcaption>
+    </figure>
+    <figure>
+      <img src="03-generated-pdf-render.png" alt="Generated PDF render" />
+      <figcaption>Current generated PDF (real pipeline output)</figcaption>
+    </figure>
+  </div>
+</body>
+</html>

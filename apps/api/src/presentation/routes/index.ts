@@ -1,0 +1,40 @@
+import { Router } from 'express';
+import { authRouter } from './auth.routes';
+import { campaignsRouter } from './campaigns.routes';
+import { dashboardRouter } from './dashboard.routes';
+import { clinicalRouter } from './clinical.routes';
+import { measurementsRouter } from './measurements.routes';
+import { patientsRouter } from './patients.routes';
+import { usersRouter } from './users.routes';
+import { exportRouter } from './export.routes';
+import { reportsRouter } from './reports.routes';
+import { screeningsRouter } from './screenings.routes';
+import { setupRouter } from './setup.routes';
+import { auditRouter } from './audit.routes';
+import { clinicalRulesRouter } from './clinical-rules.routes';
+import { clinicSettingsRouter } from './clinic-settings.routes';
+import { syncRouter } from './sync.routes';
+import { aiScreeningRouter } from './ai-screening.routes';
+import { whatsappSessionRouter } from './whatsapp-session.routes';
+
+const apiRouter = Router();
+
+apiRouter.use('/auth', authRouter);
+apiRouter.use('/setup', setupRouter);
+apiRouter.use('/audit', auditRouter);
+apiRouter.use('/clinical-rules', clinicalRulesRouter);
+apiRouter.use('/clinic-settings', clinicSettingsRouter);
+apiRouter.use('/ai', aiScreeningRouter);
+apiRouter.use('/sync', syncRouter);
+apiRouter.use('/whatsapp', whatsappSessionRouter);
+apiRouter.use('/campaigns', campaignsRouter);
+apiRouter.use('/dashboard', dashboardRouter);
+apiRouter.use('/export', exportRouter);
+apiRouter.use('/patients', patientsRouter);
+apiRouter.use('/users', usersRouter);
+apiRouter.use('/reports', reportsRouter);
+apiRouter.use('/screenings', screeningsRouter);
+apiRouter.use('/', measurementsRouter);
+apiRouter.use('/', clinicalRouter);
+
+export { apiRouter };

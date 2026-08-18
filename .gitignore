@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# Testing
+coverage/
+
+# Prisma
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+
+# Docker volumes
+postgres-data/
+
+# PWA generated
+dev-dist/
+sw.js
+workbox-*.js
+
+# Storage (local uploads)
+storage/
+uploads/
+
+# Temp
+tmp/
+temp/
+*.tmp
+tmp-*
+**/tmp-*.pdf
+**/tmp-*.json
+**/tmp-*.txt
+
+# WhatsApp web.js cache
+**/.wwebjs_cache/

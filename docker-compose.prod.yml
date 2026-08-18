@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medscreen-postgres-prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-medscreen}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-medscreen}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - medscreen-internal
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-medscreen}']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      target: production
+    container_name: medscreen-api-prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      API_PORT: 3001
+      API_HOST: 0.0.0.0
+      DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+      STORAGE_LOCAL_PATH: /app/storage
+    volumes:
+      - api-storage:/app/storage
+    networks:
+      - medscreen-internal
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+      target: production
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: medscreen-web-prod
+    restart: always
+    ports:
+      - '${WEB_PORT:-80}:80'
+    networks:
+      - medscreen-internal
+    depends_on:
+      - api
+
+networks:
+  medscreen-internal:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  api-storage:

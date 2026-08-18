@@ -1,0 +1,17 @@
+source_logo_len=75288 head=ffd8ffe0
+pdf_font declared=393576 extracted=450647
+pdf_cidmap declared=1184 extracted=1441 expected_raw=1184
+pdf_logo declared=75288 extracted=112951 head=c3bfc398
+logo_src_utf8_corrupt_len=112950
+logo_match=no
+corrupt_logo_head=c3bfc398 pdf_logo_head=c3bfc398
+corrupt_logo_matches_pdf=True
+pdf_font_head=00010000 expected_ttf=00010000
+pdf_font_starts_with_ttf=True
+logo_expansion=1.5003
+font_expansion_if_raw_is_decl=1.1450
+GID_at_021B_in_pdf=49811 (0xc293)
+sample_gid_499_utf8_corrupt=01c3b3
+CID 0x0219 GID=450
+CID 0x021b GID=49811
+CID 0x0103 GID=194

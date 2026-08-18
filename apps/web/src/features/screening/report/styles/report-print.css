@@ -1,0 +1,103 @@
+body.report-print-page {
+  margin: 0;
+  background: #ffffff;
+}
+
+#clinical-report .report-brand-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Header accent lines — short decorative separators only (no full-span grid borders) */
+#clinical-report .report-header-accent-h {
+  width: 72px;
+  height: 1px;
+  background: rgba(0, 61, 91, 0.18);
+}
+
+#clinical-report .report-header-accent-v {
+  width: 1px;
+  height: 30px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  background: rgba(0, 61, 91, 0.2);
+}
+
+#clinical-report .report-header-top {
+  align-items: flex-start;
+}
+
+#clinical-report .report-header-bottom {
+  align-items: flex-start;
+}
+
+#clinical-report .report-header-qr-box {
+  border: 1px solid rgba(0, 61, 91, 0.08);
+}
+
+#clinical-report .report-header-partners .report-brand-image {
+  max-height: 46px;
+}
+
+#clinical-report .report-section-title {
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: normal;
+  hyphens: manual;
+}
+
+.report-print-empty {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body.report-print-page {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  #clinical-report {
+    font-size: 9pt;
+    line-height: 1.4;
+  }
+
+  #clinical-report .report-page-1 {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  #clinical-report .report-page-2 {
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+
+  #clinical-report .report-header-top,
+  #clinical-report .report-header-bottom {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  #clinical-report .report-header-brand,
+  #clinical-report .report-header-contact {
+    width: 34%;
+  }
+
+  #clinical-report h2,
+  #clinical-report h3 {
+    letter-spacing: 0.01em;
+  }
+
+  #clinical-report table {
+    table-layout: auto;
+  }
+
+  #clinical-report .report-section-title {
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+}

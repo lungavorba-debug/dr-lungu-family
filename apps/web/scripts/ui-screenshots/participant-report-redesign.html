@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: { colors: { brand: { primary: '#003D5B', accent: '#38A649' } } } } }
+  </script>
+  <style>body { font-family: Georgia, serif; }</style>
+</head>
+<body class="bg-slate-100 p-6">
+  <article id="clinical-report" class="mx-auto max-w-[210mm] space-y-3 bg-white p-5 font-serif text-[11px]">
+    <header class="overflow-hidden rounded-xl border border-[#003D5B]/15 bg-white shadow-sm">
+      <div class="grid grid-cols-[120px_1fr_140px] items-center gap-4 px-5 py-4">
+        <img src="../../../../public/clinic-logo.svg" alt="Logo" class="h-16 w-16 rounded-xl" />
+        <div class="text-center">
+          <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#003D5B]/80">Screening cardiovascular</p>
+          <p class="text-sm font-bold uppercase text-[#003D5B]">Festivalul Tradiții Argeșene</p>
+          <p class="text-xs font-semibold uppercase text-slate-700">Ediția a XIII-a</p>
+        </div>
+        <div class="rounded-lg border border-[#003D5B]/10 bg-[#003D5B]/[0.03] px-3 py-2 text-center">
+          <p class="text-[9px] font-semibold uppercase text-slate-500">Cu sprijinul</p>
+          <p class="mt-1 text-[10px] font-bold uppercase text-[#003D5B]">Screening cu sprijinul Primăriei Comunei Corbeni</p>
+        </div>
+      </div>
+      <div class="border-t border-[#003D5B]/10 px-5 py-3 text-center text-[11px] text-slate-600">
+        <p class="font-semibold text-[#003D5B]">Dr. Lungu Family</p>
+        <p>Aleea Spitalului nr. 16, etaj 1, Pitești — vizavi de Spitalul Județean de Urgență</p>
+        <p class="mt-1">☎ 0755 75 45 45 · 🌐 www.drlungufamily.ro</p>
+      </div>
+      <div class="border-t border-[#003D5B]/10 bg-slate-50/80 px-5 py-3 text-center">
+        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">Parteneri oficiali</p>
+        <div class="mt-2 flex items-center justify-center gap-4">
+          <img src="../../../../public/partners/naturalis.svg" alt="Naturalis" class="h-10" />
+          <img src="../../../../public/partners/colegiul-medicilor-arges.svg" alt="Colegiul Medicilor Argeș" class="h-10" />
+        </div>
+      </div>
+    </header>
+
+    <section class="rounded-xl border border-[#003D5B]/10 bg-gradient-to-br from-slate-50 to-white px-4 py-4">
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Date participant</h2>
+      <dl class="mt-3 grid grid-cols-5 gap-2">
+        
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Nume</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Popescu</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Prenume</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Ion</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Vârstă</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">45 ani</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Sex</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Masculin</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Telefon</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">0755123456</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Localitate</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Corbeni</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Data screeningului</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">04 august 2026</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Ora</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">ora 22:30</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Operator</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Operator Verificare</dd>
+          </div>
+          <div class="rounded-lg border border-slate-100 bg-white/90 px-3 py-2">
+            <dt class="text-[9px] font-semibold uppercase text-slate-500">Campania</dt>
+            <dd class="mt-0.5 text-[11px] font-semibold text-slate-800">Corbeni</dd>
+          </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Factori de risc cardiovascular</h2>
+      <table class="mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white text-[11px]">
+        <thead class="bg-[#003D5B]/[0.06] text-[9px] uppercase text-[#003D5B]"><tr><th class="px-3 py-2 text-left">Întrebare</th><th class="px-3 py-2 text-left">Răspuns</th></tr></thead>
+        <tbody>
+      <tr class="bg-white">
+        <td class="px-3 py-2 font-medium text-slate-600">Hipertensiune cunoscută</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Da</td>
+      </tr>
+      <tr class="bg-slate-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Diabet cunoscut</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Nu</td>
+      </tr>
+      <tr class="bg-white">
+        <td class="px-3 py-2 font-medium text-slate-600">Fumător</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Da</td>
+      </tr>
+      <tr class="bg-slate-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Tratament</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Da — Tensiune arterială</td>
+      </tr>
+      <tr class="bg-white">
+        <td class="px-3 py-2 font-medium text-slate-600">Sforăit</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Da</td>
+      </tr>
+      <tr class="bg-slate-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Durere în piept</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">La efort</td>
+      </tr>
+      <tr class="bg-white">
+        <td class="px-3 py-2 font-medium text-slate-600">Respirație îngreunată</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">Da</td>
+      </tr></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Măsurători</h2>
+      <table class="mt-2 w-full overflow-hidden rounded-xl border border-slate-200 bg-white text-[11px]">
+        <thead class="bg-[#003D5B]/[0.06] text-[9px] uppercase text-[#003D5B]"><tr><th class="px-3 py-2 text-left">Parametru</th><th class="px-3 py-2 text-left">Valoare</th><th class="px-3 py-2 text-left">Interpretare</th></tr></thead>
+        <tbody>
+      <tr class="bg-white bg-amber-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Tensiune arterială</td>
+        <td class="px-3 py-2 font-semibold text-red-800">148 / 92</td>
+        <td class="px-3 py-2 text-xs">Peste interval</td>
+      </tr>
+      <tr class="bg-slate-50/60 ">
+        <td class="px-3 py-2 font-medium text-slate-600">Puls</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">88</td>
+        <td class="px-3 py-2 text-xs">Normal</td>
+      </tr>
+      <tr class="bg-white ">
+        <td class="px-3 py-2 font-medium text-slate-600">SpO₂</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">96%</td>
+        <td class="px-3 py-2 text-xs">Normal</td>
+      </tr>
+      <tr class="bg-slate-50/60 bg-amber-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Glicemie</td>
+        <td class="px-3 py-2 font-semibold text-red-800">115</td>
+        <td class="px-3 py-2 text-xs">Peste interval</td>
+      </tr>
+      <tr class="bg-white ">
+        <td class="px-3 py-2 font-medium text-slate-600">Greutate</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">90.0 kg</td>
+        <td class="px-3 py-2 text-xs">—</td>
+      </tr>
+      <tr class="bg-slate-50/60 ">
+        <td class="px-3 py-2 font-medium text-slate-600">Înălțime</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">180 cm</td>
+        <td class="px-3 py-2 text-xs">—</td>
+      </tr>
+      <tr class="bg-white bg-amber-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">IMC</td>
+        <td class="px-3 py-2 font-semibold text-red-800">27.78</td>
+        <td class="px-3 py-2 text-xs">Supraponderal</td>
+      </tr>
+      <tr class="bg-slate-50/60 ">
+        <td class="px-3 py-2 font-medium text-slate-600">Greutate ideală</td>
+        <td class="px-3 py-2 font-semibold text-slate-900">75.2 kg</td>
+        <td class="px-3 py-2 text-xs">—</td>
+      </tr>
+      <tr class="bg-white bg-amber-50/70">
+        <td class="px-3 py-2 font-medium text-slate-600">Circumferință abdominală</td>
+        <td class="px-3 py-2 font-semibold text-red-800">102 cm</td>
+        <td class="px-3 py-2 text-xs">Crescută</td>
+      </tr></tbody>
+      </table>
+    </section>
+
+    <section class="rounded-xl border-2 border-[#003D5B]/20 bg-[#003D5B]/[0.04] px-4 py-4">
+      <div class="flex items-start justify-between gap-2">
+        <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Risc cardiovascular</h2>
+        <span class="rounded-full bg-[#003D5B] px-3 py-1 text-[10px] font-bold uppercase text-white">RIDICAT</span>
+      </div>
+      <p class="mt-2 text-[11px] text-slate-700">[DEMO] cardiovascular: Semnale cardiovasculare ridicate — revizuire prioritară</p>
+    </section>
+
+    <section class="rounded-xl border-2 border-[#38A649]/40 bg-[#38A649]/[0.08] px-4 py-3">
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Recomandări</h2>
+      <p class="mt-2 text-[11px] text-slate-700">Pe baza informațiilor și măsurătorilor efectuate astăzi:</p>
+      <ul class="mt-2 space-y-1"><li class="text-[11px]">• consult cardiologic;</li><li class="text-[11px]">• consult pneumologic;</li><li class="text-[11px]">• monitorizarea tensiunii arteriale la domiciliu timp de 5–7 zile consecutive (două măsurători pe zi după minimum 10 minute de repaus);</li></ul>
+    </section>
+
+    <section class="grid grid-cols-2 gap-3">
+      
+        <div class="rounded-xl border border-[#003D5B]/15 bg-[#003D5B]/[0.03] px-3 py-3">
+          <h3 class="text-[10px] font-bold uppercase text-[#003D5B]">Cum se măsoară corect tensiunea arterială</h3>
+          <ul class="mt-2 space-y-1"><li class="text-[10px]">• repaus 5 minute</li><li class="text-[10px]">• fără cafea</li><li class="text-[10px]">• fără fumat</li><li class="text-[10px]">• două măsurători</li><li class="text-[10px]">• dimineața și seara</li><li class="text-[10px]">• notați valorile</li></ul>
+        </div>
+        <div class="rounded-xl border border-[#003D5B]/15 bg-[#003D5B]/[0.03] px-3 py-3">
+          <h3 class="text-[10px] font-bold uppercase text-[#003D5B]">Cum se măsoară glicemia</h3>
+          <ul class="mt-2 space-y-1"><li class="text-[10px]">• dimineața</li><li class="text-[10px]">• pe nemâncate</li><li class="text-[10px]">• înainte de tratament</li><li class="text-[10px]">• conform recomandării medicului</li></ul>
+        </div>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Protecția datelor personale</h2>
+      <p class="mt-2 text-[10px] text-slate-600">Datele dumneavoastră sunt prelucrate conform Regulamentului (UE) 2016/679 (GDPR), exclusiv în scopul desfășurării campaniei de screening cardiovascular.</p>
+    </section>
+
+    <section class="rounded-xl border-2 border-amber-300/60 bg-amber-50 px-4 py-3">
+      <p class="text-[11px] font-bold uppercase text-amber-900">Important</p>
+      <p class="mt-2 text-[10px] text-amber-950">Acest document este informativ. Nu reprezintă:</p>
+      <ul class="mt-2"><li class="text-[10px]">• consultație medicală</li><li class="text-[10px]">• diagnostic medical</li><li class="text-[10px]">• scrisoare medicală</li><li class="text-[10px]">• bilet de trimitere</li><li class="text-[10px]">• recomandare terapeutică</li></ul>
+      <p class="mt-2 text-[10px] text-amber-950">Pentru interpretarea completă a rezultatelor, vă recomandăm consultul unui medic.</p>
+    </section>
+
+    <section class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+      <h2 class="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003D5B]">Semnătura participantului</h2>
+      <div class="mt-3 flex min-h-[72px] items-end justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50/50 px-4 py-2">
+        <span class="pb-1 text-[10px] text-slate-400">Semnătura va fi colectată la finalul screeningului</span>
+      </div>
+    </section>
+  </article>
+</body>
+</html>

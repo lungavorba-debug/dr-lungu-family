@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 96" role="img" aria-label="Dr. Lungu Family">
+  <g transform="translate(100 38)">
+    <g fill="#00A651">
+      <ellipse cx="0" cy="-28" rx="8" ry="13" />
+      <ellipse cx="-18" cy="-20" rx="8" ry="13" transform="rotate(-40 -18 -20)" />
+      <ellipse cx="18" cy="-20" rx="8" ry="13" transform="rotate(40 18 -20)" />
+      <ellipse cx="-26" cy="-5" rx="8" ry="13" transform="rotate(-70 -26 -5)" />
+      <ellipse cx="26" cy="-5" rx="8" ry="13" transform="rotate(70 26 -5)" />
+      <ellipse cx="-20" cy="10" rx="7" ry="11" transform="rotate(-50 -20 10)" />
+      <ellipse cx="20" cy="10" rx="7" ry="11" transform="rotate(50 20 10)" />
+      <ellipse cx="-8" cy="-26" rx="7" ry="12" transform="rotate(-20 -8 -26)" />
+      <ellipse cx="8" cy="-26" rx="7" ry="12" transform="rotate(20 8 -26)" />
+    </g>
+    <g fill="#003D5B">
+      <circle cx="-11" cy="-2" r="5" />
+      <path d="M-11 3 C-16 3 -17 13 -14 22 L-8 22 C-5 13 -6 3 -11 3 Z" />
+      <path d="M-16 10 L-19 17 M-6 10 L-3 17" stroke="#003D5B" stroke-width="2.2" stroke-linecap="round" fill="none" />
+      <circle cx="0" cy="2" r="4" />
+      <path d="M0 6 C-4 6 -5 13 -4 19 L4 19 C5 13 4 6 0 6 Z" />
+      <path d="M-4 11 L-6 15 M4 11 L6 15" stroke="#003D5B" stroke-width="1.8" stroke-linecap="round" fill="none" />
+      <circle cx="11" cy="-2" r="5" />
+      <path d="M11 3 C16 3 17 13 14 22 L8 22 C5 13 6 3 11 3 Z" />
+      <path d="M16 10 L19 17 M6 10 L3 17" stroke="#003D5B" stroke-width="2.2" stroke-linecap="round" fill="none" />
+    </g>
+  </g>
+  <text
+    x="100"
+    y="84"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="13"
+    font-weight="700"
+    fill="#003D5B"
+    letter-spacing="0.6"
+  >
+    DR. LUNGU FAMILY
+  </text>
+</svg>

@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medscreen-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: medscreen
+      POSTGRES_PASSWORD: medscreen
+      POSTGRES_DB: medscreen
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U medscreen -d medscreen']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+      target: deps
+    container_name: medscreen-api
+    restart: unless-stopped
+    command: npm run dev -w @medscreen/api
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      API_PORT: 3001
+      API_HOST: 0.0.0.0
+      DATABASE_URL: postgresql://medscreen:medscreen@postgres:5432/medscreen?schema=public
+      JWT_SECRET: dev-secret-change-in-production-min-32-chars!!
+      JWT_EXPIRES_IN: 8h
+      CORS_ORIGIN: http://localhost:5173
+      STORAGE_TYPE: local
+      STORAGE_LOCAL_PATH: /app/storage
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - api-storage:/app/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+      target: deps
+    container_name: medscreen-web
+    restart: unless-stopped
+    command: npm run dev -w @medscreen/web -- --host 0.0.0.0
+    working_dir: /app
+    environment:
+      VITE_API_BASE_URL: http://localhost:3001/api/v1
+    ports:
+      - '5173:5173'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+volumes:
+  postgres-data:
+  api-storage:

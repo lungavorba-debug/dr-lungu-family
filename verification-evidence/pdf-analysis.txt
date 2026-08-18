@@ -1,0 +1,33 @@
+file_size=607662
+header=b'%PDF-1.4'
+OBJ 1 @ 9: b'1 0 obj\n<< /Length 393576 >>\nstream\n\x00\x01\x00\x00\x00\x13\x01\x00\x00\x04\x000FFTM\xc2\x81\xc3\xbd8M\x00\x06\x01L\x00\x00\x00\x1cGDEF{2\xc2\x84@\x00\x05\xc2\xaf\x1c\x00\x00\x00\xc2\x92GPOSKK\xc2\x88\r\x00\x05\xc2\xb8\xc3\xa8\x00\x00HdGSUBs$-G\x00\x05\xc2\xaf\xc2\xb0\x00\x00'
+OBJ 2 @ 450709: b'2 0 obj\n<< /Length 8294 >>\nstream\n/CIDInit /ProcSet findresource begin\n12 dict begin\nbegincmap\n/CIDSystemInfo << /Regist'
+OBJ 3 @ 459055: b'3 0 obj\n<< /Type /FontDescriptor /FontName /DLFSerif /Flags 32 /FontBBox [-1114 -621 2618 2010] /ItalicAngle 0 /Ascent 1'
+OBJ 4 @ 459246: b'4 0 obj\n<< /Length 1184 >>\nstream\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x04\x00\x05\x00\x06\x00\x07\x00\x08\x00\t\x00\n\x00\x0b\x00\x0c\x00\r'
+OBJ 5 @ 460738: b'5 0 obj\n<< /Type /Font /Subtype /CIDFontType2 /BaseFont /DLFSerif /CIDSystemInfo << /Registry (Adobe) /Ordering (Identit'
+OBJ 6 @ 466337: b'6 0 obj\n<< /Type /Font /Subtype /Type0 /BaseFont /DLFSerif /Encoding /Identity-H /DescendantFonts [5 0 R] /ToUnicode 2 0'
+OBJ 7 @ 466470: b'7 0 obj\n<< /Type /XObject /Subtype /Image /Width 1024 /Height 1024 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /D'
+OBJ 8 @ 579591: b'8 0 obj\n<< /Length 27441 >>\nstream\nq\n82.00 0 0 82.00 56.00 711.89 cm\n/Logo Do Q\nBT\n/F1 8 Tf\n0.000 0.239 0.357 rg\n1 0 0 1'
+OBJ 9 @ 607085: b'9 0 obj\n<< /Type /Pages /Count 1 /Kids [10 0 R] >>\nendobj\n10 0 obj\n<< /Type /Page /Parent 9 0 R /MediaBox [0 0 595.28 84'
+OBJ 10 @ 607143: b'10 0 obj\n<< /Type /Page /Parent 9 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 6 0 R >> /XObject << /Log'
+OBJ 11 @ 607303: b'11 0 obj\n<< /Type /Catalog /Pages 9 0 R >>\nendobj\nxref\n0 12\n0000000000 65535 f \n0000000009 00000 n \n0000450709 00000 n \n'
+W len_chars=5396 groups=439 total_widths=592
+W max_cid=591 expected_max=0x24f=591
+W first_group=('0', '778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 778 ')
+W last_group=('591', '500 ')
+CIDToGIDMap declared=1184 actual=1441 expected=1184
+FontFile2 declared=393576 actual=450647
+FontFile2 endstream_inside=0
+*** FontFile2 LENGTH MISMATCH — stream truncated at first endstream ***
+Logo head=c3bfc398 is_jpeg=False len=112951
+content Tj count=85
+ToUnicode len=8294 has_0219=True has_0103=True
+CID 0x0061 -> GID 68
+CID 0x0103 -> GID 194
+CID 0x0219 -> GID 450
+CID 0x021b -> GID 49811
+CID 0x00ee -> GID 194
+CID 0x00e2 -> GID 194
+W covers CID 0x0103: True
+W covers CID 0x0219: True
+W covers CID 0x021b: True

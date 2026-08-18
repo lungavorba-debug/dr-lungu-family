@@ -1,0 +1,32 @@
+{
+  "name": "@medscreen/ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MedScreen design system and UI component library",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./styles": "./src/styles/globals.css"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.3"
+  }
+}

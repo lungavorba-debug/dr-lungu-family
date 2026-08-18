@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-primary: #003d5b;
+    --brand-secondary: #002a40;
+    --brand-accent: #38a649;
+    --brand-surface: #f8fafc;
+  }
+
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply min-h-screen bg-brand-surface text-slate-900;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) transparent;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  #clinical-report {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}

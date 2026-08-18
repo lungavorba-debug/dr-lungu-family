@@ -1,0 +1,81 @@
+{
+  "comparisons": [
+    {
+      "field": "Font dictionary (Type0)",
+      "v2Hash": "ffae5518f30ecf57",
+      "sprint95Hash": "48582965fcef8f91",
+      "match": false,
+      "v2Preview": "<< /Type /Font /Subtype /Type0 /BaseFont /DLFSerif /Encoding /Identity-H /DescendantFonts [5 0 R] /ToUnicode 2 0 R >>",
+      "sprint95Preview": "<< /Type /Font /Subtype /Type0 /BaseFont /LiberationSerif /Encoding /Identity-H /DescendantFonts [5 0 R] /ToUnicode 2 0 R >>"
+    },
+    {
+      "field": "FontDescriptor",
+      "v2Hash": "b39010d3adde9b99",
+      "sprint95Hash": "4f2b528df70055e3",
+      "match": false,
+      "v2Preview": "<< /Type /FontDescriptor /FontName /DLFSerif /Flags 32 /FontBBox [-1114 -621 2618 2010] /ItalicAngle 0 /Ascent 1825 /Descent -443 /CapHeight 1434 /StemV 80 /FontFile2 1 0 R >>",
+      "sprint95Preview": "<< /Type /FontDescriptor /FontName /LiberationSerif /Flags 32 /FontBBox [-1114 -621 2618 2010] /ItalicAngle 0 /Ascent 1825 /Descent -443 /CapHeight 1434 /StemV 80 /FontFile2 1 0 R >>"
+    },
+    {
+      "field": "FontFile2 stream bytes",
+      "v2Hash": "e3b0c44298fc1c14",
+      "sprint95Hash": "e3b0c44298fc1c14",
+      "match": true
+    },
+    {
+      "field": "CIDToGIDMap stream bytes",
+      "v2Hash": "e3b0c44298fc1c14",
+      "sprint95Hash": "e3b0c44298fc1c14",
+      "match": true
+    },
+    {
+      "field": "ToUnicode CMap stream",
+      "v2Hash": "e3b0c44298fc1c14",
+      "sprint95Hash": "e3b0c44298fc1c14",
+      "match": true
+    },
+    {
+      "field": "/W array",
+      "v2Hash": "e3b0c44298fc1c14",
+      "sprint95Hash": "e3b0c44298fc1c14",
+      "match": true
+    },
+    {
+      "field": "/DW",
+      "v2Hash": "/DW 250",
+      "sprint95Hash": "/DW 250",
+      "match": true
+    },
+    {
+      "field": "Encoding (/Identity-H on Type0)",
+      "v2Hash": "",
+      "sprint95Hash": "",
+      "match": true
+    },
+    {
+      "field": "Content stream (full)",
+      "v2Hash": "e3b0c44298fc1c14",
+      "sprint95Hash": "e3b0c44298fc1c14",
+      "match": true
+    }
+  ],
+  "textOps": {
+    "v2": {
+      "Tj": 0,
+      "Tm": 0,
+      "Td": 0,
+      "TJ": 0
+    },
+    "sprint95": {
+      "Tj": 0,
+      "Tm": 0,
+      "Td": 0,
+      "TJ": 0
+    }
+  },
+  "tjHexMatch": true,
+  "v2ContentText": "",
+  "s95ContentText": "",
+  "v2FullHash": "ce80d0e2cc8def75",
+  "s95FullHash": "ae05439e6ba627f4"
+}

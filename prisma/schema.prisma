@@ -1,0 +1,297 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    String @id @default(uuid()) @db.Uuid
+  name  String @unique
+
+  users User[]
+
+  @@map("roles")
+}
+
+model User {
+  id                   String    @id @default(uuid()) @db.Uuid
+  firstName            String
+  lastName             String
+  email                String    @unique
+  passwordHash         String
+  roleId               String    @db.Uuid
+  active               Boolean   @default(true)
+  lastLoginAt          DateTime? @map("last_login_at")
+  failedLoginAttempts  Int       @default(0) @map("failed_login_attempts")
+  lockedUntil          DateTime? @map("locked_until")
+  mustChangePassword   Boolean   @default(false) @map("must_change_password")
+  passwordChangedAt    DateTime? @map("password_changed_at")
+  tokenVersion         Int       @default(0) @map("token_version")
+  medicalSpecialty     String?   @map("medical_specialty")
+  professionalTitle    String?   @map("professional_title")
+  licenseNumber        String?   @map("license_number")
+  phone                String?
+  avatarImageBase64    String?   @map("avatar_image_base64") @db.Text
+  avatarMimeType       String?   @map("avatar_mime_type")
+  signatureImageBase64 String?   @map("signature_image_base64") @db.Text
+  signatureMimeType    String?   @map("signature_mime_type")
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  role                Role                 @relation(fields: [roleId], references: [id])
+  screenings          Screening[]
+  screeningDeliveries ScreeningDelivery[]
+  screeningAiSessions ScreeningAiSession[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@index([roleId])
+  @@map("users")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  tokenHash String    @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+model Campaign {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String
+  workPoint      String   @map("work_point")
+  edition        String?
+  description    String?
+  startDate      DateTime @map("start_date") @db.Date
+  endDate        DateTime @map("end_date") @db.Date
+  isActive       Boolean  @default(false) @map("is_active")
+  status         String   @default("upcoming")
+  organizer      String?
+  screeningType  String?  @map("screening_type")
+  notes          String?  @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  screenings Screening[]
+  screeningAiSessions ScreeningAiSession[]
+
+  @@index([status])
+  @@map("campaigns")
+}
+
+model ScreeningAiSession {
+  id             String   @id @default(uuid()) @db.Uuid
+  operatorId     String   @map("operator_id") @db.Uuid
+  campaignId     String?  @map("campaign_id") @db.Uuid
+  screeningId    String?  @unique @map("screening_id") @db.Uuid
+  status         String   @default("draft")
+  transcript     Json     @default("[]") @db.JsonB
+  extraction     Json?    @db.JsonB
+  operatorReview Json     @default("[]") @map("operator_review") @db.JsonB
+  providerId     String?  @map("provider_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  operator User      @relation(fields: [operatorId], references: [id])
+  campaign Campaign? @relation(fields: [campaignId], references: [id])
+  screening Screening? @relation(fields: [screeningId], references: [id])
+
+  @@index([operatorId])
+  @@index([campaignId])
+  @@map("screening_ai_sessions")
+}
+
+model Patient {
+  id        String   @id @default(uuid()) @db.Uuid
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  phone     String   @unique
+  age       Int
+  gender    String
+  city      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  screenings Screening[]
+
+  @@index([phone])
+  @@map("patients")
+}
+
+model Screening {
+  id                              String    @id @default(uuid()) @db.Uuid
+  campaignId                      String    @map("campaign_id") @db.Uuid
+  operatorId                      String    @map("operator_id") @db.Uuid
+  patientId                       String?   @map("patient_id") @db.Uuid
+  status                          String    @default("measurements")
+  systolicBp                      Int?      @map("systolic_bp")
+  diastolicBp                     Int?      @map("diastolic_bp")
+  pulse                           Int?
+  oxygenSaturation                Int?      @map("oxygen_saturation")
+  bloodGlucose                    Int?      @map("blood_glucose")
+  bloodGlucoseStatus              String?   @map("blood_glucose_status")
+  weightKg                        Decimal?  @map("weight_kg") @db.Decimal(5, 2)
+  heightCm                        Decimal?  @map("height_cm") @db.Decimal(5, 2)
+  bmi                             Decimal?  @db.Decimal(4, 2)
+  waistCircumferenceCm            Int?      @map("waist_circumference_cm")
+  knownHypertension               Boolean?  @map("known_hypertension")
+  knownDiabetes                   Boolean?  @map("known_diabetes")
+  currentAntihypertensiveTreatment Boolean? @map("current_antihypertensive_treatment")
+  anamnesis                       Json?     @db.JsonB
+  clinicalEvaluation              Json?     @map("clinical_evaluation") @db.JsonB
+  participantReport               Json?     @map("participant_report") @db.JsonB
+  signatureImageBase64            String?   @map("signature_image_base64") @db.Text
+  signatureMimeType                 String?   @map("signature_mime_type")
+  signatureSignedAt               DateTime? @map("signature_signed_at")
+  signatureParticipantName        String?   @map("signature_participant_name")
+  pdfFilename                     String?   @map("pdf_filename")
+  pdfStoragePath                  String?   @map("pdf_storage_path")
+  pdfByteLength                   Int?      @map("pdf_byte_length")
+  pdfGeneratorVersion             Int?      @map("pdf_generator_version")
+  pdfGeneratedAt                  DateTime? @map("pdf_generated_at")
+  completedAt                     DateTime? @map("completed_at")
+  createdAt                       DateTime  @default(now()) @map("created_at")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  operator User     @relation(fields: [operatorId], references: [id])
+  patient  Patient? @relation(fields: [patientId], references: [id])
+  deliveries ScreeningDelivery[]
+  aiSession ScreeningAiSession?
+
+  @@index([campaignId])
+  @@index([operatorId])
+  @@index([patientId])
+  @@index([createdAt])
+  @@index([status])
+  @@map("screenings")
+}
+
+model ScreeningDelivery {
+  id                String    @id @default(uuid()) @db.Uuid
+  screeningId       String    @map("screening_id") @db.Uuid
+  channel           String
+  status            String
+  recipient         String
+  providerMessageId String?   @map("provider_message_id")
+  errorMessage      String?   @map("error_message") @db.Text
+  attemptedAt       DateTime  @default(now()) @map("attempted_at")
+  sentAt            DateTime? @map("sent_at")
+  operatorId        String    @map("operator_id") @db.Uuid
+
+  screening Screening @relation(fields: [screeningId], references: [id], onDelete: Cascade)
+  operator  User      @relation(fields: [operatorId], references: [id])
+
+  @@index([screeningId])
+  @@index([screeningId, channel])
+  @@map("screening_deliveries")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  occurredAt  DateTime @default(now()) @map("occurred_at")
+  userId      String   @map("user_id") @db.Uuid
+  userName    String   @map("user_name")
+  role        String
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String?  @map("entity_id")
+  description String   @db.Text
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent") @db.Text
+
+  @@index([occurredAt])
+  @@index([userId])
+  @@index([action])
+  @@index([entityType, entityId])
+  @@map("audit_logs")
+}
+
+model ClinicalRuleSet {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  version   Int      @default(1)
+  isActive  Boolean  @default(false) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  rules   ClinicalRule[]
+  changes ClinicalRuleChange[]
+
+  @@map("clinical_rule_sets")
+}
+
+model ClinicalRule {
+  id                 String   @id @default(uuid()) @db.Uuid
+  ruleSetId          String   @map("rule_set_id") @db.Uuid
+  code               String
+  name               String
+  category           String
+  severity           String
+  ruleType           String   @map("rule_type")
+  thresholdKey       String?  @map("threshold_key")
+  thresholdValue     Decimal? @map("threshold_value") @db.Decimal(10, 2)
+  thresholdUnit      String?  @map("threshold_unit")
+  recommendationText String?  @map("recommendation_text") @db.Text
+  enabled            Boolean  @default(true)
+  version            Int      @default(1)
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  ruleSet ClinicalRuleSet      @relation(fields: [ruleSetId], references: [id], onDelete: Cascade)
+  changes ClinicalRuleChange[]
+
+  @@unique([ruleSetId, code])
+  @@index([ruleSetId, enabled])
+  @@index([category])
+  @@map("clinical_rules")
+}
+
+model ClinicalRuleChange {
+  id            String   @id @default(uuid()) @db.Uuid
+  ruleId        String   @map("rule_id") @db.Uuid
+  ruleSetId     String   @map("rule_set_id") @db.Uuid
+  version       Int
+  changedById   String   @map("changed_by_id") @db.Uuid
+  changedByName String   @map("changed_by_name")
+  changeType    String   @map("change_type")
+  previousValue Json?    @map("previous_value") @db.JsonB
+  newValue      Json     @map("new_value") @db.JsonB
+  occurredAt    DateTime @default(now()) @map("occurred_at")
+
+  rule    ClinicalRule    @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  ruleSet ClinicalRuleSet @relation(fields: [ruleSetId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId])
+  @@index([ruleSetId])
+  @@index([occurredAt])
+  @@map("clinical_rule_changes")
+}
+
+model ClinicSettings {
+  id            String   @id @default("default")
+  clinicInfo    Json     @map("clinic_info") @db.JsonB
+  branding      Json     @db.JsonB
+  contact       Json     @db.JsonB
+  logo          Json     @db.JsonB
+  footer        Json     @db.JsonB
+  pdf           Json     @db.JsonB
+  qr            Json     @db.JsonB
+  smtp          Json     @db.JsonB
+  whatsapp      Json     @db.JsonB
+  ai            Json     @db.JsonB
+  application   Json     @map("application_settings") @db.JsonB
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  updatedById   String?  @map("updated_by_id") @db.Uuid
+  updatedByName String?  @map("updated_by_name")
+
+  @@map("clinic_settings")
+}

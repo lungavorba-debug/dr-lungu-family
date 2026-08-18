@@ -1,0 +1,71 @@
+{
+  "name": "medscreen-festival",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MedScreen Festival & Event Suite — medical screening PWA platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "setup": "node scripts/setup-dev-env.mjs && docker compose up -d postgres && npm run db:push && npm run db:seed",
+    "predev": "node scripts/setup-dev-env.mjs",
+    "dev": "concurrently -k -n api,web -c green,blue \"npm run dev -w @medscreen/api\" \"node scripts/wait-for-api.mjs && npm run dev -w @medscreen/web\"",
+    "dev:web": "npm run dev -w @medscreen/web",
+    "dev:api": "npm run dev -w @medscreen/api",
+    "build": "npm run build:packages && npm run build -w @medscreen/api && npm run build -w @medscreen/web",
+    "build:packages": "npm run build -w @medscreen/types && npm run build -w @medscreen/config && npm run build -w @medscreen/shared && npm run build -w @medscreen/ui",
+    "install:pdf-engine": "node scripts/install-playwright-chromium.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "npm run typecheck -w @medscreen/types && npm run typecheck -w @medscreen/config && npm run typecheck -w @medscreen/shared && npm run typecheck -w @medscreen/ui && npm run typecheck -w @medscreen/api && npm run typecheck -w @medscreen/web",
+    "test:report": "tsx packages/shared/src/report/fixtures/load-fixtures.ts && tsx packages/shared/src/report/test-participant-report-schema.ts && tsx packages/shared/src/clinical/test-participant-view-parity.ts",
+    "verify:whatsapp": "node scripts/verify-whatsapp-delivery.mjs",
+    "verify:whatsapp:health": "node scripts/verify-whatsapp-health.mjs",
+    "test:user-admin": "tsx apps/api/src/application/users/test-user-admin-guards.ts",
+    "test:campaigns": "tsx apps/api/src/application/campaigns/test-campaign-admin.ts",
+    "test:auth-security": "tsx apps/api/src/application/auth/test-auth-security.ts",
+    "test:audit": "tsx apps/api/src/application/audit/test-audit-log.ts",
+    "test:sync": "tsx apps/api/src/application/sync/test-sync-status.ts && tsx apps/web/src/features/sync/test-sync-utils.ts",
+    "test:clinical-rules": "tsx apps/api/src/application/clinical-rules/test-clinical-rules.ts && tsx packages/shared/src/clinical/test-build-engine-config.ts",
+    "test:clinic-settings": "tsx apps/api/src/application/clinic-settings/test-clinic-settings.ts && tsx packages/shared/src/clinic/test-resolve-clinic-settings.ts && tsx packages/shared/src/clinic/test-branding-assets.ts",
+    "test:ai-screening": "tsx packages/shared/src/ai/test-ai-screening.ts && tsx apps/api/src/application/ai-screening/test-ai-screening.ts",
+    "test:lan": "tsx scripts/test-lan-access.ts",
+    "test:dev-cors": "tsx apps/api/scripts/test-dev-cors-origin.ts",
+    "clean": "npm run clean -w @medscreen/web && npm run clean -w @medscreen/api && npm run clean -w @medscreen/ui && npm run clean -w @medscreen/shared && npm run clean -w @medscreen/config && npm run clean -w @medscreen/types",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate && node scripts/install-playwright-chromium.mjs"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^22.10.7",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
+    "typescript-eslint": "^8.21.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}

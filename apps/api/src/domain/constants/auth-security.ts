@@ -1,0 +1,3 @@
+export const MAX_FAILED_LOGIN_ATTEMPTS = 5;
+export const ACCOUNT_LOCKOUT_MS = 15 * 60 * 1000;
+export const PASSWORD_RESET_TOKEN_TTL_MS = 60 * 60 * 1000;

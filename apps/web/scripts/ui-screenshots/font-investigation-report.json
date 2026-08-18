@@ -1,0 +1,314 @@
+{
+  "current": {
+    "label": "packages/shared/src/pdf/fonts/liberation-serif-font-bytes.ts (LIBERATION_SERIF_REGULAR_TTF_BASE64)",
+    "sourcePath": "packages/shared/src/pdf/fonts/liberation-serif-font-bytes.ts (LIBERATION_SERIF_REGULAR_TTF_BASE64)",
+    "sha256": "058ea80864aef09a23f45cbec2bb5400bc3dfbdea01c3f10538a21fcb497fb74",
+    "sizeBytes": 393576,
+    "sfntVersion": "true",
+    "names": {
+      "fontFamily": "Liberation Serif",
+      "fontSubfamily": "Regular",
+      "fullName": "Liberation Serif",
+      "postScriptName": "LiberationSerif"
+    },
+    "unitsPerEm": 2048,
+    "numGlyphs": 2602,
+    "head": {
+      "macStyle": 0,
+      "indexToLocFormat": 256,
+      "created": 3359953102,
+      "modified": 0,
+      "bbox": [
+        -1114,
+        -621,
+        2618,
+        2010
+      ]
+    },
+    "hhea": {
+      "ascender": 1825,
+      "descender": -443,
+      "advanceWidthMax": 2730,
+      "numOfLongHorMetrics": 2602
+    },
+    "hmtx": {
+      "tableBytes": 10408,
+      "sha256": "852a630b1d3bc8fe98bf6679d343d04bfb3f90dfa31eae7fdcd6c1753528da0b"
+    },
+    "os2": null,
+    "cmap": {
+      "tableBytes": 1590,
+      "sha256": "825d289d4ef33587d3ffe1acc0cbe374f29ebdce27888de97b924b8d7fa77794",
+      "subtables": [
+        "platform=0 encoding=3 format=4",
+        "platform=1 encoding=0 format=6",
+        "platform=3 encoding=1 format=4"
+      ]
+    },
+    "glyf": {
+      "tableBytes": 311012,
+      "sha256": "500eb87de78f8f940522d3e9a8eb2fc71f664bb8ed3dab9491108dc3965c1eca",
+      "integrity": "ok"
+    },
+    "tables": [
+      {
+        "tag": "FFTM",
+        "length": 28,
+        "checksum": "81fd384d"
+      },
+      {
+        "tag": "GDEF",
+        "length": 146,
+        "checksum": "7b328440"
+      },
+      {
+        "tag": "GPOS",
+        "length": 18532,
+        "checksum": "4b4b880d"
+      },
+      {
+        "tag": "GSUB",
+        "length": 2360,
+        "checksum": "73242d47"
+      },
+      {
+        "tag": "OS/2",
+        "length": 96,
+        "checksum": "0388c6a0"
+      },
+      {
+        "tag": "cmap",
+        "length": 1590,
+        "checksum": "22ad47a5"
+      },
+      {
+        "tag": "cvt ",
+        "length": 722,
+        "checksum": "5e1b5231"
+      },
+      {
+        "tag": "fpgm",
+        "length": 1972,
+        "checksum": "7e61b611"
+      },
+      {
+        "tag": "gasp",
+        "length": 16,
+        "checksum": "001a0009"
+      },
+      {
+        "tag": "glyf",
+        "length": 311012,
+        "checksum": "d2cba1fd"
+      },
+      {
+        "tag": "head",
+        "length": 54,
+        "checksum": "0ad4a750"
+      },
+      {
+        "tag": "hhea",
+        "length": 36,
+        "checksum": "0d5b0df9"
+      },
+      {
+        "tag": "hmtx",
+        "length": 10408,
+        "checksum": "4734043b"
+      },
+      {
+        "tag": "kern",
+        "length": 5220,
+        "checksum": "32bb472f"
+      },
+      {
+        "tag": "loca",
+        "length": 10412,
+        "checksum": "1a55c440"
+      },
+      {
+        "tag": "maxp",
+        "length": 32,
+        "checksum": "0db705d5"
+      },
+      {
+        "tag": "name",
+        "length": 2976,
+        "checksum": "acc4769f"
+      },
+      {
+        "tag": "post",
+        "length": 26725,
+        "checksum": "31a774ee"
+      },
+      {
+        "tag": "prep",
+        "length": 912,
+        "checksum": "01679506"
+      }
+    ],
+    "sampleWidths": {
+      "A": 722,
+      "a": 444,
+      "space": 250,
+      "abreve": 722
+    }
+  },
+  "official": {
+    "label": "C:\\Users\\Dr. Lungu Family 3\\Desktop\\MedScreen Festival\\apps\\web\\scripts\\ui-screenshots\\_font-investigation\\LiberationSerif-Regular.ttf",
+    "sourcePath": "C:\\Users\\Dr. Lungu Family 3\\Desktop\\MedScreen Festival\\apps\\web\\scripts\\ui-screenshots\\_font-investigation\\LiberationSerif-Regular.ttf",
+    "sha256": "058ea80864aef09a23f45cbec2bb5400bc3dfbdea01c3f10538a21fcb497fb74",
+    "sizeBytes": 393576,
+    "sfntVersion": "true",
+    "names": {
+      "fontFamily": "Liberation Serif",
+      "fontSubfamily": "Regular",
+      "fullName": "Liberation Serif",
+      "postScriptName": "LiberationSerif"
+    },
+    "unitsPerEm": 2048,
+    "numGlyphs": 2602,
+    "head": {
+      "macStyle": 0,
+      "indexToLocFormat": 256,
+      "created": 3359953102,
+      "modified": 0,
+      "bbox": [
+        -1114,
+        -621,
+        2618,
+        2010
+      ]
+    },
+    "hhea": {
+      "ascender": 1825,
+      "descender": -443,
+      "advanceWidthMax": 2730,
+      "numOfLongHorMetrics": 2602
+    },
+    "hmtx": {
+      "tableBytes": 10408,
+      "sha256": "852a630b1d3bc8fe98bf6679d343d04bfb3f90dfa31eae7fdcd6c1753528da0b"
+    },
+    "os2": null,
+    "cmap": {
+      "tableBytes": 1590,
+      "sha256": "825d289d4ef33587d3ffe1acc0cbe374f29ebdce27888de97b924b8d7fa77794",
+      "subtables": [
+        "platform=0 encoding=3 format=4",
+        "platform=1 encoding=0 format=6",
+        "platform=3 encoding=1 format=4"
+      ]
+    },
+    "glyf": {
+      "tableBytes": 311012,
+      "sha256": "500eb87de78f8f940522d3e9a8eb2fc71f664bb8ed3dab9491108dc3965c1eca",
+      "integrity": "ok"
+    },
+    "tables": [
+      {
+        "tag": "FFTM",
+        "length": 28,
+        "checksum": "81fd384d"
+      },
+      {
+        "tag": "GDEF",
+        "length": 146,
+        "checksum": "7b328440"
+      },
+      {
+        "tag": "GPOS",
+        "length": 18532,
+        "checksum": "4b4b880d"
+      },
+      {
+        "tag": "GSUB",
+        "length": 2360,
+        "checksum": "73242d47"
+      },
+      {
+        "tag": "OS/2",
+        "length": 96,
+        "checksum": "0388c6a0"
+      },
+      {
+        "tag": "cmap",
+        "length": 1590,
+        "checksum": "22ad47a5"
+      },
+      {
+        "tag": "cvt ",
+        "length": 722,
+        "checksum": "5e1b5231"
+      },
+      {
+        "tag": "fpgm",
+        "length": 1972,
+        "checksum": "7e61b611"
+      },
+      {
+        "tag": "gasp",
+        "length": 16,
+        "checksum": "001a0009"
+      },
+      {
+        "tag": "glyf",
+        "length": 311012,
+        "checksum": "d2cba1fd"
+      },
+      {
+        "tag": "head",
+        "length": 54,
+        "checksum": "0ad4a750"
+      },
+      {
+        "tag": "hhea",
+        "length": 36,
+        "checksum": "0d5b0df9"
+      },
+      {
+        "tag": "hmtx",
+        "length": 10408,
+        "checksum": "4734043b"
+      },
+      {
+        "tag": "kern",
+        "length": 5220,
+        "checksum": "32bb472f"
+      },
+      {
+        "tag": "loca",
+        "length": 10412,
+        "checksum": "1a55c440"
+      },
+      {
+        "tag": "maxp",
+        "length": 32,
+        "checksum": "0db705d5"
+      },
+      {
+        "tag": "name",
+        "length": 2976,
+        "checksum": "acc4769f"
+      },
+      {
+        "tag": "post",
+        "length": 26725,
+        "checksum": "31a774ee"
+      },
+      {
+        "tag": "prep",
+        "length": 912,
+        "checksum": "01679506"
+      }
+    ],
+    "sampleWidths": {
+      "A": 722,
+      "a": 444,
+      "space": 250,
+      "abreve": 722
+    }
+  },
+  "bytesMatch": true,
+  "tableDiffs": []
+}

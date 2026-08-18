@@ -1,0 +1,45 @@
+{
+  "id": "healthy",
+  "screening_id": "11111111-0001-4111-8111-000000000001",
+  "patient_id": "11111111-2222-3333-4444-555555555555",
+  "campaign_id": "11111111-1111-4111-8111-111111111111",
+  "captured_at": "2026-08-01T11:35:00.000Z",
+  "participant": {
+    "first_name": "Ion",
+    "last_name": "Popescu",
+    "gender": "M",
+    "age": 45
+  },
+  "campaign": {
+    "name": "Festivalul Tradiții Argeșene",
+    "edition": "Ediția a XIII-a",
+    "description": "Screening cu sprijinul Primăriei Comunei Corbeni",
+    "work_point": "Corbeni"
+  },
+  "operatorName": "Dr. Maria Lungu",
+  "measurements": {
+    "systolic_bp": 118,
+    "diastolic_bp": 76,
+    "pulse": 72,
+    "oxygen_saturation": 98,
+    "blood_glucose": 92,
+    "blood_glucose_status": "fasting",
+    "weight_kg": 75,
+    "height_cm": 178,
+    "bmi": 23.7,
+    "waist_circumference_cm": 86,
+    "known_hypertension": false,
+    "known_diabetes": false,
+    "current_antihypertensive_treatment": false
+  },
+  "anamnesis": {
+    "smoking_status": "never",
+    "alcohol_consumption": "none",
+    "known_diabetes": false,
+    "chest_pain": false,
+    "dyspnea": false,
+    "snoring": false,
+    "current_treatment": "",
+    "free_notes": ""
+  }
+}
