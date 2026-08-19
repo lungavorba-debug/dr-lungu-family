@@ -494,12 +494,16 @@ function RiskFactorsTable({ report }: { report: ParticipantReport }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200/80">
-      <table className="w-full text-left text-[9px]">
+    <div className="report-screening-questions-table overflow-hidden rounded-xl border border-slate-200/80">
+      <table className="w-full table-fixed text-left text-[9px]">
+        <colgroup>
+          <col className="w-[58%]" />
+          <col className="w-[42%]" />
+        </colgroup>
         <thead className="border-b border-brand-primary/10 bg-brand-primary/[0.04] text-[8px] uppercase tracking-wide text-brand-primary">
           <tr>
-            <th className="px-2.5 py-1.5 font-semibold">Factor</th>
-            <th className="px-2.5 py-1.5 font-semibold">Răspuns</th>
+            <th className="px-2.5 py-1.5 text-left font-semibold">Factor</th>
+            <th className="px-2.5 py-1.5 text-left font-semibold">Răspuns</th>
           </tr>
         </thead>
         <tbody>
@@ -530,9 +534,13 @@ export function ClinicalReportMeasurementsAndRiskFactors({ report }: { report: P
         </div>
       </CardShell>
       <CardShell className="min-w-0 px-4 py-3">
-        <SectionHeading>{report.layout.copy.screening_questions_title}</SectionHeading>
-        <div className="mt-2">
-          <RiskFactorsTable report={report} />
+        <div className="report-screening-questions-block">
+          <SectionHeading className="report-screening-questions-title">
+            {report.layout.copy.screening_questions_title}
+          </SectionHeading>
+          <div className="report-screening-questions-body mt-2.5">
+            <RiskFactorsTable report={report} />
+          </div>
         </div>
       </CardShell>
     </div>

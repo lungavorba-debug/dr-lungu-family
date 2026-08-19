@@ -1,4 +1,4 @@
-import { formatPhoneInput } from '@medscreen/shared';
+import { formatPhoneInput, normalizeParticipantCityInput } from '@medscreen/shared';
 import type { PatientGender, VoiceScreeningExtractionResult, VoiceScreeningFieldName } from '@medscreen/types';
 import { resolveConfidenceTier } from './confidence-merge';
 import { mapExtractedChestPain } from './screening-questions';
@@ -129,7 +129,7 @@ export function applyVoiceExtractionToDemographics(
         next.last_name = text;
         hints.last_name = buildHint(entry.confidence, entry.source_sentence);
       } else if (formField === 'city') {
-        next.city = text;
+        next.city = normalizeParticipantCityInput(text);
         hints.city = buildHint(entry.confidence, entry.source_sentence);
       }
     }

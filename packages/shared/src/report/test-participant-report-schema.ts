@@ -174,8 +174,9 @@ assert('findings section title', minimalReport.findings.section_title === SECTIO
 assert('summary section constant', SECTION_TITLE_SUMMARY === 'Rezumat');
 assert('measurements section constant', SECTION_TITLE_MEASUREMENTS === 'Măsurători');
 assert('recommendations section constant', SECTION_TITLE_RECOMMENDATIONS === 'Recomandări medicale & stil de viață');
-assert('formatParticipantCity title case', formatParticipantCity('pitesti') === 'Pitesti');
+assert('formatParticipantCity title case', formatParticipantCity('pitesti') === 'Pitești');
 assert('formatParticipantCity multi word', formatParticipantCity('curtea de arges') === 'Curtea De Arges');
+assert('formatParticipantCity voice fix', formatParticipantCity('Ștrfănești') === 'Ștefănești');
 assert('column: Parametru', MEASUREMENT_COLUMN_PARAMETER === 'Parametru');
 assert('column: Rezultat', MEASUREMENT_COLUMN_RESULT === 'Rezultat');
 assert('column: Interval de referință', MEASUREMENT_COLUMN_REFERENCE_RANGE === 'Interval de referință');

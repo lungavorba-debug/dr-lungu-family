@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { composeParticipantReport } from '@medscreen/shared';
 import { composeScreeningAnamnesis } from '../../conversation/lib/anamnesis-storage';
 import type { CompleteScreeningRequest } from '@medscreen/types';
@@ -14,6 +14,7 @@ import { useStartNewScreening } from '../../hooks/useStartNewScreening';
 import { useScreeningSession } from '../../context/ScreeningSessionContext';
 import { loadScreeningPdf } from '../../report/lib/pdf-session-storage';
 import { loadScreeningSignature } from '../../signature/lib/signature-session-storage';
+import { buildClinicalReportProps } from '../../report/lib/build-clinical-report-props';
 import { useCompleteScreening } from '../hooks/useCompleteScreening';
 import { useDeliveryAvailability } from '../../delivery/hooks/useDeliveryAvailability';
 import { useClinicSettingsSnapshot } from '../../../settings/context/ClinicSettingsContext';
@@ -40,6 +41,50 @@ function mapAnamnesis(anamnesis: NonNullable<ReturnType<typeof useScreeningSessi
   return composeScreeningAnamnesis(anamnesis);
 }
 
+function useCompletionReportProps() {
+  const { user } = useAuth();
+  const { activeCampaign } = useCampaign();
+  const {
+    activePatient,
+    anamnesis,
+    measurements,
+    clinicalEvaluation,
+    clinicalEngineInput,
+  } = useScreeningSession();
+
+  return useMemo(() => {
+    if (
+      !activePatient ||
+      !anamnesis ||
+      !measurements ||
+      !clinicalEvaluation ||
+      !clinicalEngineInput ||
+      !activeCampaign ||
+      !user
+    ) {
+      return null;
+    }
+
+    return buildClinicalReportProps({
+      activePatient,
+      anamnesis,
+      measurements,
+      clinicalEvaluation,
+      clinicalEngineInput,
+      activeCampaign,
+      user,
+    });
+  }, [
+    activePatient,
+    anamnesis,
+    measurements,
+    clinicalEvaluation,
+    clinicalEngineInput,
+    activeCampaign,
+    user,
+  ]);
+}
+
 export function ScreeningCompletionPage() {
   const startNewScreening = useStartNewScreening();
   const { user } = useAuth();
@@ -47,6 +92,7 @@ export function ScreeningCompletionPage() {
   const completeScreening = useCompleteScreening();
   const { enqueueScreening } = useSyncQueue();
   const clinicSettingsSnapshot = useClinicSettingsSnapshot();
+  const completionReportProps = useCompletionReportProps();
   const persistAttemptedRef = useRef(false);
   const [persistMessage, setPersistMessage] = useState<string | null>(null);
   const [persistError, setPersistError] = useState<string | null>(null);
@@ -102,7 +148,8 @@ export function ScreeningCompletionPage() {
       !resolvedPdf ||
       !resolvedSignature ||
       !activeCampaign ||
-      !user
+      !user ||
+      !completionReportProps
     ) {
       return;
     }
@@ -113,23 +160,14 @@ export function ScreeningCompletionPage() {
 
     const participantReport = composeParticipantReport(
       {
-        participant: {
-          first_name: activePatient.first_name,
-          last_name: activePatient.last_name,
-          gender: activePatient.gender,
-          age: activePatient.age,
-        },
-        campaign: {
-          name: activeCampaign.name,
-          work_point: activeCampaign.work_point,
-          edition: activeCampaign.edition,
-          description: activeCampaign.description,
-        },
-        screeningDate: clinicalEngineInput?.captured_at ?? clinicalEvaluation.evaluated_at,
-        operatorName: `${user.firstName} ${user.lastName}`,
-        measurements,
-        anamnesis: mapAnamnesis(anamnesis),
-        evaluation: clinicalEvaluation,
+        participant: completionReportProps.participant,
+        campaign: completionReportProps.campaign,
+        screeningDate: completionReportProps.screeningDate,
+        operatorName: completionReportProps.operatorName,
+        measurements: completionReportProps.measurements,
+        anamnesis: completionReportProps.anamnesis,
+        evaluation: completionReportProps.evaluation,
+        screening_display: completionReportProps.screeningDisplay,
       },
       clinicSettingsSnapshot,
     );
@@ -228,6 +266,8 @@ export function ScreeningCompletionPage() {
     anamnesis,
     clinicalEngineInput,
     clinicalEvaluation,
+    clinicSettingsSnapshot,
+    completionReportProps,
     completeScreening,
     resolvedPdf,
     measurements,
