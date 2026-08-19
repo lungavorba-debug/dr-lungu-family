@@ -1,10 +1,9 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 export const EMAIL_LOGO_CID = 'clinic-logo';
 
-const assetsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../assets/email');
+const assetsDir = path.join(__dirname, '../../assets/email');
 
 export function resolveEmailLogoPath(): string {
   return path.join(assetsDir, 'clinic-logo.png');

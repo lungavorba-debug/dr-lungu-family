@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import {
   isWhatsAppDeliveryConfigured,
   parseApiEnvOrThrow,
@@ -20,7 +19,7 @@ import {
   printWhatsAppCloudConfigCheck,
 } from './infrastructure/whatsapp/whatsapp-cloud-config.service';
 
-const apiRoot = path.dirname(fileURLToPath(import.meta.url));
+const apiRoot = path.join(__dirname, '..');
 const envFilePath = path.join(apiRoot, '../.env');
 
 dotenv.config({ path: envFilePath, override: true });

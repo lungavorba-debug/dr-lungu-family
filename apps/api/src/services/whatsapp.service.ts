@@ -288,13 +288,6 @@ class WhatsAppService {
     }
   }
 
-  private async prepareClient(): Promise<void> {
-    await this.destroyClient();
-    this.client = this.createClient();
-    this.handlersAttachedFor = null;
-    this.attachEventHandlers(this.client);
-  }
-
   private async startClient(reason: string): Promise<void> {
     this.lastError = null;
     this.markInitializing();

@@ -40,6 +40,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "reset:admin-password": "tsx scripts/reset-admin-password.ts",
     "postinstall": "prisma generate && node scripts/install-playwright-chromium.mjs"
   },
   "prisma": {

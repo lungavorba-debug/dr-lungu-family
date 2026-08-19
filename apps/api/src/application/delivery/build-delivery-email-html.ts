@@ -1,5 +1,5 @@
-import { EMAIL_LOGO_CID } from './delivery-email-assets.ts';
-import { DELIVERY_EMAIL_LINKS, resolveBookingUrl } from './delivery-email-links.ts';
+import { EMAIL_LOGO_CID } from './delivery-email-assets';
+import { DELIVERY_EMAIL_LINKS, resolveBookingUrl } from './delivery-email-links';
 
 export const EMAIL_AUTO_FOOTER =
   'Acest email a fost generat automat de Clinica Dr. Lungu Family.\nDo not reply to this email.';

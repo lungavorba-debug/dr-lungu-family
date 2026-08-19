@@ -11,7 +11,7 @@ import {
   buildDeliveryEmailHtml,
   EMAIL_AUTO_FOOTER,
   EMAIL_MEDICAL_DISCLAIMER,
-} from './build-delivery-email-html.ts';
+} from './build-delivery-email-html';
 
 export const REPORT_EMAIL_SUBJECT = 'Raport medical – Screening Cardiovascular | Dr. Lungu Family';
 
