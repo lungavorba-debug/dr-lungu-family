@@ -5,7 +5,7 @@
 # Monorepo note:
 # - Do NOT set rootDir to apps/api. Prisma lives in prisma/ at the repo root,
 #   and @medscreen/* workspace packages must be built from the root.
-# - This service builds and starts apps/api from the repository root.
+# - Build logic is centralized in scripts/render-build.mjs.
 
 services:
   - type: web
@@ -21,17 +21,15 @@ services:
         - apps/api/**
         - packages/**
         - prisma/**
+        - scripts/render-build.mjs
         - scripts/install-playwright-chromium.mjs
+        - scripts/postinstall.mjs
         - package.json
         - package-lock.json
         - tsconfig.base.json
         - render.yaml
 
-    buildCommand: >-
-      npm ci --ignore-scripts &&
-      npx prisma generate &&
-      npm run build:packages &&
-      npm run build --workspace=@medscreen/api
+    buildCommand: node scripts/render-build.mjs
 
     # Render injects PORT; map it to API_PORT used by @medscreen/config.
     startCommand: sh -c "API_PORT=${PORT} node apps/api/dist/server.js"
@@ -41,10 +39,16 @@ services:
         value: production
       - key: API_HOST
         value: 0.0.0.0
-      # Skip Playwright browser download during install (PDF engine optional on Render).
+      - key: STORAGE_LOCAL_PATH
+        value: ./storage
+      # Skip heavy browser downloads (PDF/WhatsApp Web optional on Render).
       - key: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD
         value: '1'
-      # ─── Set these in the Render Dashboard (or link from an env group) ───
+      - key: PUPPETEER_SKIP_DOWNLOAD
+        value: 'true'
+      - key: SKIP_POSTINSTALL
+        value: '1'
+      # ─── Required in Render Dashboard (production) ───
       - key: DATABASE_URL
         sync: false
       - key: DIRECT_URL

@@ -15,6 +15,8 @@
     "dev:api": "npm run dev -w @medscreen/api",
     "build": "npm run build:packages && npm run build -w @medscreen/api && npm run build -w @medscreen/web",
     "build:packages": "npm run build -w @medscreen/types && npm run build -w @medscreen/config && npm run build -w @medscreen/shared && npm run build -w @medscreen/ui",
+    "build:render": "node scripts/render-build.mjs",
+    "build:vercel": "node scripts/vercel-build.mjs",
     "install:pdf-engine": "node scripts/install-playwright-chromium.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -41,7 +43,7 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "reset:admin-password": "tsx scripts/reset-admin-password.ts",
-    "postinstall": "prisma generate && node scripts/install-playwright-chromium.mjs"
+    "postinstall": "node scripts/postinstall.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
