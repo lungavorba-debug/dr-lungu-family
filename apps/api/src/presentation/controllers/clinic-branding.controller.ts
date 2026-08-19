@@ -48,13 +48,18 @@ export async function getClinicBrandingAssetController(
 ): Promise<void> {
   try {
     const kind = req.params.kind;
-    if (kind !== 'logo' && kind !== 'favicon') {
+    if (kind !== 'logo' && kind !== 'favicon' && kind !== 'report_qr') {
       next(new AppError(404, 'NOT_FOUND', 'Asset-ul solicitat nu există.'));
       return;
     }
 
     const settings = await clinicSettingsResolverInstance.getSettings();
-    const mime = kind === 'logo' ? settings.logo.logo_mime : settings.logo.favicon_mime;
+    const mime =
+      kind === 'logo'
+        ? settings.logo.logo_mime
+        : kind === 'favicon'
+          ? settings.logo.favicon_mime
+          : settings.logo.report_qr_mime;
     const bytes = await clinicBrandingStorageService.readAsset(kind, mime);
 
     if (!bytes) {

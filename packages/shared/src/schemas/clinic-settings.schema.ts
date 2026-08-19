@@ -31,13 +31,15 @@ export const logoSettingsSchema = z.object({
   logo_mime: z.string().min(3).max(40),
   favicon_path: z.string().max(500).nullable(),
   favicon_mime: z.string().min(3).max(40),
+  report_qr_path: z.string().max(500).nullable(),
+  report_qr_mime: z.string().min(3).max(40),
   sidebar_initials: z.string().min(1).max(4),
 });
 
 const brandingAssetMimeSchema = z.string().min(3).max(40);
 
 export const uploadBrandingAssetSchema = z.object({
-  kind: z.enum(['logo', 'favicon']),
+  kind: z.enum(['logo', 'favicon', 'report_qr']),
   file_base64: z.string().min(1),
   mime: brandingAssetMimeSchema,
 });

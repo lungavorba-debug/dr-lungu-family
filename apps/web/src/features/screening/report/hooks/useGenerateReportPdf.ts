@@ -1,12 +1,16 @@
 import { useCallback, useState } from 'react';
 
-import { buildParticipantReportFilename, composeParticipantReport, PDF_GENERATOR_VERSION } from '@medscreen/shared';
+import {
+  buildParticipantReportFilename,
+  composeParticipantReport,
+  PDF_GENERATOR_VERSION,
+} from '@medscreen/shared';
 
 import { useClinicSettingsSnapshot } from '../../../settings/context/ClinicSettingsContext';
-import { apiClient } from '../../../../shared/lib/api-client';
 import type { ClinicalReportProps } from '../types/clinical-report-props';
 import type { StoredScreeningPdf } from '../lib/pdf-session-storage';
 import { persistScreeningPdf } from '../lib/pdf-session-storage';
+import { generateClientReportPdf } from '../lib/generate-client-report-pdf';
 
 export function useGenerateReportPdf() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -32,19 +36,20 @@ export function useGenerateReportPdf() {
         clinicSettingsSnapshot,
       );
 
-      const generated = await apiClient.generateParticipantReportPdf({
-        participant_report: report as unknown as Record<string, unknown>,
-        participant_signature_data_url: props.participantSignatureDataUrl ?? null,
+      const generatedAt = new Date().toISOString();
+      const clientPdf = await generateClientReportPdf({
+        report,
+        participantSignatureDataUrl: props.participantSignatureDataUrl ?? null,
       });
 
       const stored: StoredScreeningPdf = {
-        filename: generated.filename || buildParticipantReportFilename(report),
+        filename: buildParticipantReportFilename(report),
         mime_type: 'application/pdf',
-        base64: generated.base64,
-        generated_at: generated.generated_at,
-        byte_length: generated.byte_length,
-        screening_id: generated.screening_id,
-        generator_version: generated.generator_version ?? PDF_GENERATOR_VERSION,
+        base64: clientPdf.base64,
+        generated_at: generatedAt,
+        byte_length: clientPdf.byte_length,
+        screening_id: report.metadata.report_id,
+        generator_version: PDF_GENERATOR_VERSION,
       };
 
       persistScreeningPdf(stored.screening_id, stored);

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import type { BrandingAssetKind } from '@medscreen/types';
-import { BRANDING_FAVICON_MIMES, BRANDING_LOGO_MIMES } from '@medscreen/shared';
+import { BRANDING_FAVICON_MIMES, BRANDING_LOGO_MIMES, BRANDING_REPORT_QR_MIMES } from '@medscreen/shared';
 import { dataUrlToBase64, readFileAsDataUrl, resolveBrandingAssetUrl } from '../lib/branding-url';
 import { useUploadClinicBrandingAsset } from '../hooks/useClinicBrandingUpload';
 
@@ -17,6 +17,7 @@ interface BrandingAssetFieldProps {
 const ACCEPT_BY_KIND: Record<BrandingAssetKind, string> = {
   logo: BRANDING_LOGO_MIMES.join(','),
   favicon: BRANDING_FAVICON_MIMES.join(','),
+  report_qr: BRANDING_REPORT_QR_MIMES.join(','),
 };
 
 export function BrandingAssetField({

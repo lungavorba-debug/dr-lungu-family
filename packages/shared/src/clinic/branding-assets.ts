@@ -2,6 +2,7 @@ import type { BrandingAssetKind } from '@medscreen/types';
 
 export const BRANDING_LOGO_API_PATH = '/clinic-settings/assets/logo';
 export const BRANDING_FAVICON_API_PATH = '/clinic-settings/assets/favicon';
+export const BRANDING_REPORT_QR_API_PATH = '/clinic-settings/assets/report_qr';
 
 export const BRANDING_LOGO_MIMES = [
   'image/png',
@@ -19,6 +20,9 @@ export const BRANDING_FAVICON_MIMES = [
 
 export const BRANDING_LOGO_MAX_BYTES = 2 * 1024 * 1024;
 export const BRANDING_FAVICON_MAX_BYTES = 512 * 1024;
+export const BRANDING_REPORT_QR_MAX_BYTES = 1024 * 1024;
+
+export const BRANDING_REPORT_QR_MIMES = ['image/png', 'image/jpeg', 'image/webp'] as const;
 
 const MIME_EXTENSION: Record<string, string> = {
   'image/png': 'png',
@@ -30,15 +34,21 @@ const MIME_EXTENSION: Record<string, string> = {
 };
 
 export function brandingAssetApiPath(kind: BrandingAssetKind): string {
-  return kind === 'logo' ? BRANDING_LOGO_API_PATH : BRANDING_FAVICON_API_PATH;
+  if (kind === 'logo') return BRANDING_LOGO_API_PATH;
+  if (kind === 'favicon') return BRANDING_FAVICON_API_PATH;
+  return BRANDING_REPORT_QR_API_PATH;
 }
 
 export function allowedBrandingMimes(kind: BrandingAssetKind): readonly string[] {
-  return kind === 'logo' ? BRANDING_LOGO_MIMES : BRANDING_FAVICON_MIMES;
+  if (kind === 'logo') return BRANDING_LOGO_MIMES;
+  if (kind === 'favicon') return BRANDING_FAVICON_MIMES;
+  return BRANDING_REPORT_QR_MIMES;
 }
 
 export function brandingAssetMaxBytes(kind: BrandingAssetKind): number {
-  return kind === 'logo' ? BRANDING_LOGO_MAX_BYTES : BRANDING_FAVICON_MAX_BYTES;
+  if (kind === 'logo') return BRANDING_LOGO_MAX_BYTES;
+  if (kind === 'favicon') return BRANDING_FAVICON_MAX_BYTES;
+  return BRANDING_REPORT_QR_MAX_BYTES;
 }
 
 export function brandingAssetExtension(mime: string): string {

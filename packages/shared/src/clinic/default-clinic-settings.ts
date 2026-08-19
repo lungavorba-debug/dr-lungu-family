@@ -35,6 +35,8 @@ export const DEFAULT_CLINIC_SETTINGS: ClinicSettingsRecord = {
     logo_mime: 'image/jpeg',
     favicon_path: null,
     favicon_mime: 'image/png',
+    report_qr_path: null,
+    report_qr_mime: 'image/png',
     sidebar_initials: 'MS',
   },
   footer: {

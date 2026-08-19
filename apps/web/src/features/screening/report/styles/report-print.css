@@ -24,7 +24,22 @@ body.report-print-page {
 }
 
 #clinical-report .report-header-top {
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+#clinical-report .report-header-title {
+  justify-self: center;
+  text-align: center;
+}
+
+#clinical-report .report-header-brand {
+  justify-self: start;
+}
+
+#clinical-report .report-header-qr-wrap {
+  justify-self: end;
 }
 
 #clinical-report .report-header-bottom {
@@ -117,13 +132,14 @@ body.report-print-page {
 
   #clinical-report .report-header-top,
   #clinical-report .report-header-bottom {
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
 
   #clinical-report .report-header-brand,
   #clinical-report .report-header-contact {
-    width: 34%;
+    width: auto;
   }
 
   #clinical-report h2,

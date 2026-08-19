@@ -247,8 +247,17 @@ export function SettingsPage() {
         </SettingsSection>
       ) : null}
 
-      {activeSection === CLINIC_SETTINGS_SECTIONS.PDF && pdf ? (
+      {activeSection === CLINIC_SETTINGS_SECTIONS.PDF && pdf && logo ? (
         <SettingsSection title="PDF" description="Branding și conținut rapoarte PDF." onSave={() => void save('pdf', pdf)} isPending={updateSection.isPending} message={saveMessage} error={saveError}>
+          <BrandingAssetField
+            kind="report_qr"
+            label="Cod QR header raport"
+            description="Imaginea QR din antetul raportului PDF. Dacă lipsește, se folosește apps/web/public/qr-programari.png."
+            currentPath={logo.report_qr_path}
+            currentMime={logo.report_qr_mime}
+            cacheKey={data?.meta.updated_at}
+            onUploaded={() => void refetch()}
+          />
           <Field label="Titlu raport"><input className={inputClassName} value={pdf.report_title} onChange={(e) => setPdf({ ...pdf, report_title: e.target.value })} /></Field>
           <Field label="Titlu educație TA"><input className={inputClassName} value={pdf.blood_pressure_education_title} onChange={(e) => setPdf({ ...pdf, blood_pressure_education_title: e.target.value })} /></Field>
           <Field label="Sfaturi educație TA (câte un rând)"><textarea className={textareaClassName} rows={4} value={pdf.blood_pressure_education_tips.join('\n')} onChange={(e) => setPdf({ ...pdf, blood_pressure_education_tips: e.target.value.split('\n').filter(Boolean) })} /></Field>

@@ -6,6 +6,7 @@ import {
 } from '../../clinic/resolve-clinic-settings';
 import { formatMeasurementNote } from '../report-formatters';
 import { formatParticipantCity } from '../format-participant-city';
+import { resolveBrandingAssetUrl } from '../../clinic/branding-assets';
 import type { MeasurementBadgeLevel } from '../../clinical/participant-view/build-measurement-rows';
 import { buildPremiumMeasurementRows } from '../report-measurement-interpretation';
 import { buildParticipantFindingLabels } from '../../clinical/participant-view/finding-labels';
@@ -269,7 +270,7 @@ export function composeParticipantReport(
     },
     qr: {
       url: REPORT_QR_URL,
-      image_src: REPORT_QR_IMAGE_SRC,
+      image_src: resolveReportQrImageSrc(settings),
       algorithm_version: '2',
     },
   };
@@ -277,6 +278,10 @@ export function composeParticipantReport(
 
 function resolveLogoMime(mime: string): 'image/jpeg' | 'image/svg+xml' {
   return mime === 'image/svg+xml' ? 'image/svg+xml' : 'image/jpeg';
+}
+
+function resolveReportQrImageSrc(settings: ClinicSettingsSnapshot): string {
+  return resolveBrandingAssetUrl(settings.logo.report_qr_path) ?? REPORT_QR_IMAGE_SRC;
 }
 
 export function buildParticipantReportFilename(report: ParticipantReport): string {

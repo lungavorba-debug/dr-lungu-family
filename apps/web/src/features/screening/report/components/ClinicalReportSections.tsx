@@ -68,10 +68,6 @@ function HeaderAccentLine({ className = '' }: { className?: string }) {
   return <div className={`report-header-accent-h ${className}`} aria-hidden="true" />;
 }
 
-function HeaderShortVLine() {
-  return <div className="report-header-accent-v" aria-hidden="true" />;
-}
-
 function PartnerColumn({
   label,
   name,
@@ -295,9 +291,9 @@ export function ClinicalReportClinicHeader({ report }: { report: ParticipantRepo
 
   return (
     <header className="report-header overflow-hidden rounded-2xl border border-brand-primary/10 bg-white shadow-[0_2px_12px_rgba(0,61,91,0.05)]">
-      {/* Rând sus: branding | titlu | QR */}
-      <div className="report-header-top flex flex-col gap-3 px-4 pt-4 sm:flex-row sm:items-start sm:gap-4 sm:px-5">
-        <div className="report-header-brand shrink-0 sm:w-[34%]">
+      {/* Rând sus: logo | titlu centrat | QR — coloane egale pentru centrare reală pe pagină */}
+      <div className="report-header-top grid grid-cols-3 items-start gap-3 px-4 pt-4 sm:gap-4 sm:px-5">
+        <div className="report-header-brand min-w-0 justify-self-start">
           <img
             src={REPORT_CLINIC_LOGO_SRC}
             alt={report.clinic.name}
@@ -307,28 +303,22 @@ export function ClinicalReportClinicHeader({ report }: { report: ParticipantRepo
           <HeaderAccentLine className="mt-2.5" />
         </div>
 
-        <div className="report-header-title flex min-w-0 flex-1 items-start justify-center pt-0.5">
-          <div className="flex w-full max-w-[320px] items-start justify-center gap-2.5">
-            <HeaderShortVLine />
-            <div className="min-w-0 flex-1 text-center">
-              <p className="text-[13px] font-bold uppercase leading-tight tracking-wide text-brand-primary">
-                {formatUpper(copy.header_campaign_label)}
-              </p>
-              <HeaderAccentLine className="mx-auto mt-1.5 max-w-[210px]" />
-              <p className="mt-1.5 text-[8.5px] font-bold uppercase leading-snug text-brand-primary/90">
-                {formatUpper(report.event.festival_name)}
-              </p>
-              {report.event.edition ? (
-                <p className="mt-0.5 text-[8.5px] font-bold uppercase leading-snug text-brand-primary/90">
-                  {formatUpper(report.event.edition)}
-                </p>
-              ) : null}
-            </div>
-            <HeaderShortVLine />
-          </div>
+        <div className="report-header-title min-w-0 self-start justify-self-center px-1 text-center">
+          <p className="text-[13px] font-bold uppercase leading-tight tracking-wide text-brand-primary">
+            {formatUpper(copy.header_campaign_label)}
+          </p>
+          <HeaderAccentLine className="mx-auto mt-1.5 max-w-[210px]" />
+          <p className="mt-1.5 text-[8.5px] font-bold uppercase leading-snug text-brand-primary/90">
+            {formatUpper(report.event.festival_name)}
+          </p>
+          {report.event.edition ? (
+            <p className="mt-0.5 text-[8.5px] font-bold uppercase leading-snug text-brand-primary/90">
+              {formatUpper(report.event.edition)}
+            </p>
+          ) : null}
         </div>
 
-        <div className="report-header-qr-wrap flex shrink-0 justify-end sm:pt-0.5">
+        <div className="report-header-qr-wrap min-w-0 justify-self-end sm:pt-0.5">
           <ReportQrImage label={copy.qr_label} imageSrc={qrImageSrc} />
         </div>
       </div>

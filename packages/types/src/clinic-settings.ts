@@ -44,10 +44,12 @@ export interface LogoSettings {
   logo_mime: string;
   favicon_path: string | null;
   favicon_mime: string;
+  report_qr_path: string | null;
+  report_qr_mime: string;
   sidebar_initials: string;
 }
 
-export type BrandingAssetKind = 'logo' | 'favicon';
+export type BrandingAssetKind = 'logo' | 'favicon' | 'report_qr';
 
 export interface UploadBrandingAssetRequest {
   kind: BrandingAssetKind;

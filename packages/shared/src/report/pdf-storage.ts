@@ -1,6 +1,6 @@
 /** Stored participant report PDF helpers — HTML/Chromium generator (v5+). */
 
-export const PDF_GENERATOR_VERSION = 14;
+export const PDF_GENERATOR_VERSION = 15;
 
 export interface StoredParticipantReportPdfMeta {
   generator_version?: number;

@@ -67,11 +67,17 @@ export class UploadClinicBrandingAssetUseCase {
             logo_path: apiPath,
             logo_mime: payload.mime,
           }
-        : {
-            ...current.logo,
-            favicon_path: apiPath,
-            favicon_mime: payload.mime,
-          };
+        : payload.kind === 'favicon'
+          ? {
+              ...current.logo,
+              favicon_path: apiPath,
+              favicon_mime: payload.mime,
+            }
+          : {
+              ...current.logo,
+              report_qr_path: apiPath,
+              report_qr_mime: payload.mime,
+            };
 
     await this.repository.updateSection('logo', nextLogo, changedBy);
     this.resolver.invalidateCache();

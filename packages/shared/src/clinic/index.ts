@@ -16,6 +16,7 @@ export {
   BRANDING_LOGO_MIMES,
   BRANDING_LOGO_MAX_BYTES,
   BRANDING_FAVICON_MAX_BYTES,
+  BRANDING_REPORT_QR_MIMES,
   decodeBrandingAssetBase64,
   deriveSecondaryBrandColor,
   resolveBrandingAssetUrl,
