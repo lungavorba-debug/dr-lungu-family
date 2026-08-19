@@ -46,6 +46,45 @@ body.report-print-page {
   hyphens: manual;
 }
 
+#clinical-report .report-screening-questions-block {
+  display: block;
+  width: 100%;
+}
+
+#clinical-report .report-screening-questions-title {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.35rem;
+  line-height: 1.35;
+}
+
+#clinical-report .report-screening-questions-body {
+  display: block;
+  width: 100%;
+  clear: both;
+}
+
+#clinical-report .report-screening-questions-table {
+  display: block;
+  width: 100%;
+  margin-top: 0.15rem;
+}
+
+#clinical-report .report-screening-questions-table table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#clinical-report .report-screening-questions-table thead {
+  display: table-header-group;
+}
+
+#clinical-report .report-screening-questions-table th,
+#clinical-report .report-screening-questions-table td {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
 .report-print-empty {
   display: none;
 }

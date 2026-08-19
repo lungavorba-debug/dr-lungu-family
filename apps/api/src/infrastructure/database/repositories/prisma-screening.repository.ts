@@ -64,6 +64,7 @@ function mapExportRow(row: {
   pdfFilename: string | null;
   pdfStoragePath: string | null;
   signatureImageBase64: string | null;
+  signatureMimeType: string | null;
   signatureSignedAt: Date | null;
   clinicalEvaluation: unknown;
   patient: {
@@ -101,6 +102,9 @@ function mapExportRow(row: {
     hasPdf: Boolean(row.pdfStoragePath && row.pdfFilename),
     hasSignature: Boolean(row.signatureImageBase64),
     signatureSignedAt: row.signatureSignedAt,
+    signatureImageBase64: row.signatureImageBase64,
+    signatureMimeType: row.signatureMimeType,
+    pdfFilename: row.pdfFilename,
   };
 }
 

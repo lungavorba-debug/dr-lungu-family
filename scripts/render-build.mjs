@@ -1,16 +1,24 @@
 /**
- * Render.com API build pipeline (also runnable locally after `npm ci --ignore-scripts`).
+ * Render.com API build pipeline — always runs from monorepo root.
  */
 import { spawnSync } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
+import { resolveMonorepoRoot } from './resolve-monorepo-root.mjs';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolveMonorepoRoot();
+
+if (!existsSync(`${root}/package.json`) || !existsSync(`${root}/apps/api/package.json`)) {
+  console.error('[render-build] Invalid monorepo root:', root);
+  process.exit(1);
+}
+
+console.log(`[render-build] Monorepo root: ${root}`);
 
 const deployEnv = {
   ...process.env,
   PUPPETEER_SKIP_DOWNLOAD: process.env.PUPPETEER_SKIP_DOWNLOAD ?? 'true',
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: process.env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD ?? '1',
+  SKIP_POSTINSTALL: process.env.SKIP_POSTINSTALL ?? '1',
 };
 
 function run(label, command, args = [], options = {}) {

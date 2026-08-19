@@ -3,9 +3,9 @@
 # Frontend: deploy separately on Vercel (see vercel.json).
 #
 # Monorepo note:
-# - Do NOT set rootDir to apps/api. Prisma lives in prisma/ at the repo root,
-#   and @medscreen/* workspace packages must be built from the root.
-# - Build logic is centralized in scripts/render-build.mjs.
+# - rootDir MUST stay at repo root (`.`). Do NOT set Render Dashboard Root Directory to apps/api.
+# - Prisma lives in prisma/ at the repo root; @medscreen/* packages build from the root.
+# - Build/start scripts auto-detect monorepo root if dashboard rootDir was misconfigured.
 
 services:
   - type: web
@@ -14,6 +14,7 @@ services:
     region: frankfurt
     plan: starter
     branch: main
+    rootDir: .
     healthCheckPath: /api/v1/health
 
     buildFilter:
@@ -22,6 +23,8 @@ services:
         - packages/**
         - prisma/**
         - scripts/render-build.mjs
+        - scripts/render-start.mjs
+        - scripts/resolve-monorepo-root.mjs
         - scripts/install-playwright-chromium.mjs
         - scripts/postinstall.mjs
         - package.json
@@ -31,8 +34,7 @@ services:
 
     buildCommand: node scripts/render-build.mjs
 
-    # Render injects PORT; map it to API_PORT used by @medscreen/config.
-    startCommand: sh -c "API_PORT=${PORT} node apps/api/dist/server.js"
+    startCommand: node scripts/render-start.mjs
 
     envVars:
       - key: NODE_ENV

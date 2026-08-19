@@ -87,6 +87,9 @@ export interface ScreeningExportRecord {
   hasPdf: boolean;
   hasSignature: boolean;
   signatureSignedAt: Date | null;
+  signatureImageBase64: string | null;
+  signatureMimeType: string | null;
+  pdfFilename: string | null;
 }
 
 export interface CompletedScreeningListRecord {

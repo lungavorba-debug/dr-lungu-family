@@ -22,6 +22,7 @@ export const EXPORT_SCREENINGS_HEADERS = [
   'PDF disponibil',
   'Semnatura',
   'Data semnatura',
+  'PDF individual',
 ] as const;
 
 function formatDateTime(value: Date): string {
@@ -32,6 +33,13 @@ function formatDateTime(value: Date): string {
     hour: '2-digit',
     minute: '2-digit',
   }).format(value);
+}
+
+export function formatSignatureExportStatus(row: ScreeningExportRecord): string {
+  if (row.hasSignature) {
+    return row.signatureSignedAt ? 'Semnat' : 'Semnat (fără dată)';
+  }
+  return 'Nesemnat';
 }
 
 export function mapScreeningExportRow(row: ScreeningExportRecord): (string | number)[] {
@@ -54,9 +62,14 @@ export function mapScreeningExportRow(row: ScreeningExportRecord): (string | num
     row.waistCircumferenceCm ?? '',
     row.hasCriticalWarning ? 'Da' : 'Nu',
     row.hasPdf ? 'Da' : 'Nu',
-    row.hasSignature ? 'Da' : 'Nu',
+    formatSignatureExportStatus(row),
     row.signatureSignedAt ? formatDateTime(row.signatureSignedAt) : '',
+    row.pdfFilename ?? '',
   ];
 }
 
 export const EXPORT_SCREENINGS_MAX_ROWS = 10000;
+
+export function resolveSignatureImageExtension(mimeType: string | null | undefined): 'png' | 'jpeg' {
+  return mimeType === 'image/jpeg' ? 'jpeg' : 'png';
+}
