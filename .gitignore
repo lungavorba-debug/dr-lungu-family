@@ -43,9 +43,9 @@ dev-dist/
 sw.js
 workbox-*.js
 
-# Storage (local uploads)
-storage/
-uploads/
+# Storage (local uploads — runtime data only, not source modules)
+/storage/
+apps/api/storage/
 
 # Temp
 tmp/
