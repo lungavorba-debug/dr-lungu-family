@@ -5,13 +5,19 @@ import puppeteer from 'puppeteer';
 import QRCode from 'qrcode';
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 
-const SESSION_DATA_PATH = './storage/whatsapp-web';
+import {
+  computeReconnectDelayMs,
+  isWhatsAppLogoutReason,
+} from './whatsapp-reconnect';
+
 const STUCK_INITIALIZING_MS = 90_000;
 
 export interface WhatsAppSessionSnapshot {
   connected: boolean;
   initializing: boolean;
   qr_available: boolean;
+  reconnecting: boolean;
+  last_error: string | null;
 }
 
 /** Puppeteer flags tuned for headless Chromium on Windows. */
@@ -24,6 +30,10 @@ const PUPPETEER_ARGS = [
   '--no-zygote',
   '--disable-gpu',
 ];
+
+function getApiRoot(): string {
+  return path.resolve(__dirname, '../..');
+}
 
 function fileExists(candidate: string): boolean {
   try {
@@ -109,12 +119,16 @@ class WhatsAppService {
   private isReady = false;
   private isInitializing = false;
   private isReconnecting = false;
+  private startInProgress = false;
+  private reconnectAttempt = 0;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private initializingStartedAt: number | null = null;
   private handlersAttachedFor: Client | null = null;
   public currentQr: string | null = null;
   public lastError: string | null = null;
 
   constructor() {
+    this.ensureSessionDirectory();
     this.client = this.createClient();
   }
 
@@ -129,8 +143,10 @@ class WhatsAppService {
   getStatus(): WhatsAppSessionSnapshot {
     return {
       connected: this.isReady,
-      initializing: this.isInitializing || this.isReconnecting,
+      initializing: this.isInitializing,
       qr_available: Boolean(this.currentQr),
+      reconnecting: this.isReconnecting,
+      last_error: this.lastError,
     };
   }
 
@@ -150,7 +166,7 @@ class WhatsAppService {
       if (status.connected || status.qr_available) {
         return status;
       }
-      if (!status.initializing && this.lastError) {
+      if (!status.initializing && !status.reconnecting && this.lastError) {
         return status;
       }
       await sleep(intervalMs);
@@ -160,7 +176,11 @@ class WhatsAppService {
   }
 
   private sessionDirectory(): string {
-    return path.resolve(process.cwd(), SESSION_DATA_PATH);
+    return path.join(getApiRoot(), 'storage', 'whatsapp-web');
+  }
+
+  private ensureSessionDirectory(): void {
+    fs.mkdirSync(this.sessionDirectory(), { recursive: true });
   }
 
   private clearSessionStorage(reason: string): void {
@@ -171,6 +191,39 @@ class WhatsAppService {
 
     console.warn(`[whatsapp-web] Se curăță sesiunea stocată (${reason}): ${sessionDir}`);
     fs.rmSync(sessionDir, { recursive: true, force: true });
+    this.ensureSessionDirectory();
+  }
+
+  private clearReconnectTimer(): void {
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+  }
+
+  private scheduleReconnect(reason: string): void {
+    if (this.isReady) {
+      return;
+    }
+
+    this.clearReconnectTimer();
+    this.isReconnecting = true;
+    this.reconnectAttempt += 1;
+
+    const delayMs = computeReconnectDelayMs(this.reconnectAttempt);
+    console.log(
+      `[whatsapp-web] Reconectare automată programată în ${Math.round(delayMs / 1000)}s (încercare #${this.reconnectAttempt}, ${reason})`,
+    );
+
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = null;
+      if (this.isReady) {
+        this.isReconnecting = false;
+        return;
+      }
+
+      void this.startClient(`auto_reconnect:${reason}`);
+    }, delayMs);
   }
 
   private markInitializing(): void {
@@ -181,7 +234,6 @@ class WhatsAppService {
 
   private clearInitializing(): void {
     this.isInitializing = false;
-    this.isReconnecting = false;
     this.initializingStartedAt = null;
   }
 
@@ -199,11 +251,14 @@ class WhatsAppService {
     console.error(`[whatsapp-web] ${message}`);
   }
 
-  /** Return to idle so the admin can press Connect again without a stuck loading state. */
-  private async resetToIdle(reason: string, options: { clearStoredSession?: boolean } = {}): Promise<void> {
+  private async resetToIdle(
+    reason: string,
+    options: { clearStoredSession?: boolean; autoReconnect?: boolean } = {},
+  ): Promise<void> {
     this.isReady = false;
     this.clearInitializing();
     this.currentQr = null;
+    this.clearReconnectTimer();
 
     try {
       await this.destroyClient();
@@ -217,7 +272,14 @@ class WhatsAppService {
 
     this.client = this.createClient();
     this.handlersAttachedFor = null;
-    console.log(`[whatsapp-web] Stare resetată (${reason}). Puteți apăsa din nou „Conectează WhatsApp”.`);
+
+    if (options.autoReconnect) {
+      this.scheduleReconnect(reason);
+      return;
+    }
+
+    this.isReconnecting = false;
+    console.log(`[whatsapp-web] Stare resetată (${reason}).`);
   }
 
   private createClient(): Client {
@@ -230,8 +292,13 @@ class WhatsAppService {
       );
     }
 
+    const sessionPath = this.sessionDirectory();
+    console.log('[whatsapp-web] Session storage:', sessionPath);
+
     return new Client({
-      authStrategy: new LocalAuth({ dataPath: SESSION_DATA_PATH }),
+      authStrategy: new LocalAuth({
+        dataPath: sessionPath,
+      }),
       puppeteer: {
         headless: true,
         ...(executablePath ? { executablePath } : {}),
@@ -263,6 +330,9 @@ class WhatsAppService {
     client.on('ready', () => {
       this.isReady = true;
       this.clearInitializing();
+      this.isReconnecting = false;
+      this.reconnectAttempt = 0;
+      this.clearReconnectTimer();
       this.currentQr = null;
       this.lastError = null;
       console.log('[whatsapp-web] ✅ Sesiune WhatsApp conectată și gata de trimitere!');
@@ -271,12 +341,17 @@ class WhatsAppService {
     client.on('auth_failure', (message) => {
       const detail = typeof message === 'string' ? message : 'auth_failure';
       this.recordFailure(`Autentificare eșuată: ${detail}`);
-      void this.resetToIdle('auth_failure', { clearStoredSession: true });
+      void this.resetToIdle('auth_failure', { clearStoredSession: true, autoReconnect: true });
     });
 
     client.on('disconnected', (reason) => {
-      this.recordFailure(`Deconectat: ${reason}`);
-      void this.resetToIdle(`disconnected:${reason}`);
+      const reasonText = String(reason);
+      this.recordFailure(`Deconectat: ${reasonText}`);
+      const logout = isWhatsAppLogoutReason(reason);
+      void this.resetToIdle(`disconnected:${reasonText}`, {
+        clearStoredSession: logout,
+        autoReconnect: true,
+      });
     });
   }
 
@@ -289,6 +364,16 @@ class WhatsAppService {
   }
 
   private async startClient(reason: string): Promise<void> {
+    if (this.isReady) {
+      return;
+    }
+
+    if (this.startInProgress) {
+      console.log('[whatsapp-web] Lansare deja în curs — se omite dublura.');
+      return;
+    }
+
+    this.startInProgress = true;
     this.lastError = null;
     this.markInitializing();
     this.attachEventHandlers(this.client);
@@ -301,6 +386,9 @@ class WhatsAppService {
         error instanceof Error ? error.message : 'Eroare necunoscută la lansarea Puppeteer/Chromium.';
       this.recordFailure(`Puppeteer crash: ${message}`);
       await this.resetToIdle('initialize_failed');
+      this.scheduleReconnect('initialize_failed');
+    } finally {
+      this.startInProgress = false;
     }
   }
 
@@ -326,9 +414,12 @@ class WhatsAppService {
       return;
     }
 
+    this.clearReconnectTimer();
+    this.isReconnecting = false;
     void this.startClient('connect');
   }
 
+  /** Non-blocking bootstrap — safe to call from server listen callback. */
   public initialize(): void {
     if (this.isReady) {
       return;

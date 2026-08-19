@@ -54,6 +54,8 @@ export function WhatsAppSessionPanel() {
   const sessionData = connectMutation.data ?? session;
   const connected = sessionData?.connected ?? false;
   const initializing = sessionData?.initializing ?? false;
+  const reconnecting = sessionData?.reconnecting ?? false;
+  const lastError = sessionData?.last_error ?? null;
   const qrDataUrl = sessionData?.qr_data_url ?? null;
   const actionError = connectMutation.error ?? (sessionIsError ? sessionError : null);
 
@@ -73,7 +75,16 @@ export function WhatsAppSessionPanel() {
         {initializing && !connected ? (
           <span className="text-xs font-normal opacity-80">— se inițializează...</span>
         ) : null}
+        {reconnecting && !connected && !initializing ? (
+          <span className="text-xs font-normal opacity-80">— reconectare automată...</span>
+        ) : null}
       </div>
+
+      {lastError && !connected ? (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          {lastError}
+        </div>
+      ) : null}
 
       <p className="text-sm text-slate-600">
         Sesiunea WhatsApp rulează pe server și este partajată de toți operatorii. Conectați telefonul
@@ -118,8 +129,10 @@ export function WhatsAppSessionPanel() {
         </div>
       ) : null}
 
-      {!connected && !qrDataUrl && (initializing || isLoading || connectMutation.isPending) ? (
-        <p className="text-sm text-slate-500">Se generează codul QR...</p>
+      {!connected && !qrDataUrl && (initializing || reconnecting || isLoading || connectMutation.isPending) ? (
+        <p className="text-sm text-slate-500">
+          {reconnecting ? 'Se reconectează automat la WhatsApp...' : 'Se generează codul QR...'}
+        </p>
       ) : null}
     </div>
   );

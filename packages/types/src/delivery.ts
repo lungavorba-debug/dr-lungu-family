@@ -41,6 +41,8 @@ export interface WhatsAppSessionStatus {
   connected: boolean;
   initializing: boolean;
   qr_available: boolean;
+  reconnecting?: boolean;
+  last_error?: string | null;
 }
 
 export interface WhatsAppSessionResponse extends WhatsAppSessionStatus {
