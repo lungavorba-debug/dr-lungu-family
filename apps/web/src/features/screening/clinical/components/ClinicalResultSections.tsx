@@ -1,4 +1,4 @@
-import type { ClinicalEvaluationResult, ClinicalRiskAssessment, ClinicalRiskLevel } from '@medscreen/types';
+import type { ClinicalEvaluationResult, ClinicalRiskAssessment, ClinicalRiskLevel, ClinicalWarning } from '@medscreen/types';
 import {
   getParticipantRiskExplanation,
   getRiskLevelLabelRo,
@@ -7,6 +7,10 @@ import {
   translateInterpretationSectionTitle,
   translateRiskOverviewLine,
 } from '@medscreen/shared';
+
+import { getGuideForFactor, getGuideForWarning, getOperatorConversationGuide } from '../lib/operator-conversation-guides';
+import type { OperatorSupplementaryAlert } from '../lib/operator-conversation-guides';
+import { OperatorConversationTip } from './OperatorConversationTip';
 
 const LEVEL_STYLES: Record<ClinicalRiskLevel, { badge: string; border: string }> = {
   unknown: { badge: 'bg-slate-100 text-slate-600', border: 'border-slate-200' },
@@ -34,42 +38,70 @@ export function RiskAssessmentCard({ assessment }: { assessment: ClinicalRiskAss
       </div>
       <p className="mt-2 text-sm text-slate-600">{explanation}</p>
       {factors.length > 0 ? (
-        <ul className="mt-3 space-y-1">
-          {factors.map((factor) => (
-            <li key={factor} className="text-sm text-slate-500">
-              • {factor}
-            </li>
-          ))}
+        <ul className="mt-3 space-y-3">
+          {factors.map((factor) => {
+            const guide = getGuideForFactor(factor);
+            return (
+              <li key={factor} className="rounded-xl border border-slate-100 bg-slate-50/60 px-3 py-2">
+                <p className="text-sm text-slate-600">• {factor}</p>
+                {guide ? <OperatorConversationTip guide={guide} /> : null}
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </div>
   );
 }
 
+function WarningListItem({
+  warning,
+  guide,
+}: {
+  warning: ClinicalWarning | OperatorSupplementaryAlert;
+  guide: string | null;
+}) {
+  const severityClass =
+    warning.severity === 'critical'
+      ? 'border-red-200 bg-red-50 text-red-800'
+      : warning.severity === 'attention'
+        ? 'border-amber-200 bg-amber-50 text-amber-800'
+        : 'border-slate-200 bg-slate-50 text-slate-700';
+
+  return (
+    <li className={`rounded-xl px-4 py-3 text-sm ${severityClass}`}>
+      {sanitizeParticipantFacingText(warning.message)}
+      {guide ? <OperatorConversationTip guide={guide} /> : null}
+    </li>
+  );
+}
+
 export function ClinicalWarningsList({
   warnings,
+  supplementaryAlerts = [],
 }: {
   warnings: ClinicalEvaluationResult['warnings'];
+  supplementaryAlerts?: OperatorSupplementaryAlert[];
 }) {
-  if (warnings.length === 0) return null;
+  if (warnings.length === 0 && supplementaryAlerts.length === 0) return null;
 
   return (
     <section className="space-y-3">
       <h2 className="text-lg font-semibold text-slate-900">Avertismente</h2>
       <ul className="space-y-2">
         {warnings.map((warning) => (
-          <li
+          <WarningListItem
             key={warning.code}
-            className={`rounded-xl px-4 py-3 text-sm ${
-              warning.severity === 'critical'
-                ? 'border border-red-200 bg-red-50 text-red-800'
-                : warning.severity === 'attention'
-                  ? 'border border-amber-200 bg-amber-50 text-amber-800'
-                  : 'border border-slate-200 bg-slate-50 text-slate-700'
-            }`}
-          >
-            {sanitizeParticipantFacingText(warning.message)}
-          </li>
+            warning={warning}
+            guide={getGuideForWarning(warning)}
+          />
+        ))}
+        {supplementaryAlerts.map((alert) => (
+          <WarningListItem
+            key={alert.code}
+            warning={alert}
+            guide={getOperatorConversationGuide(alert.guideKey)}
+          />
         ))}
       </ul>
     </section>

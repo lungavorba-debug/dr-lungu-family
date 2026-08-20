@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 
@@ -23,6 +23,11 @@ import {
   RiskAssessmentCard,
 
 } from '../components/ClinicalResultSections';
+
+import {
+  buildSupplementaryOperatorAlerts,
+  collectCoveredGuideKeys,
+} from '../lib/operator-conversation-guides';
 
 import { useEvaluateClinicalEngine } from '../hooks/useClinicalEvaluation';
 
@@ -144,6 +149,30 @@ export function ScreeningResultsPage() {
 
   const evaluation = clinicalEvaluation;
 
+  const supplementaryAlerts = useMemo(() => {
+    if (!evaluation || !anamnesis) {
+      return [];
+    }
+
+    const riskFactors = [
+      ...evaluation.risks.cardiovascular.factors,
+      ...evaluation.risks.diabetes.factors,
+      ...evaluation.risks.sleep_apnea.factors,
+    ];
+
+    const coveredGuideKeys = collectCoveredGuideKeys({
+      warnings: evaluation.warnings,
+      riskFactors,
+    });
+
+    return buildSupplementaryOperatorAlerts({
+      measurements: clinicalEngineInput.measurements,
+      anamnesis: composeScreeningAnamnesis(anamnesis),
+      participantGender: activePatient.gender,
+      coveredGuideKeys,
+    });
+  }, [activePatient.gender, anamnesis, clinicalEngineInput.measurements, evaluation]);
+
   const isLoading = (!evaluation && !error) || isRetrying;
 
 
@@ -233,7 +262,7 @@ export function ScreeningResultsPage() {
 
             <ClinicalInterpretationPanel interpretation={evaluation.interpretation} />
 
-            <ClinicalWarningsList warnings={evaluation.warnings} />
+            <ClinicalWarningsList warnings={evaluation.warnings} supplementaryAlerts={supplementaryAlerts} />
 
             <ClinicalRecommendationsList recommendations={evaluation.recommendations} />
 
