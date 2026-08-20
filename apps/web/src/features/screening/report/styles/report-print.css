@@ -1,6 +1,37 @@
 body.report-print-page {
   margin: 0;
+  padding: 0;
+  width: 100%;
   background: #ffffff;
+}
+
+body.report-print-page #root {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+body.report-print-page #clinical-report {
+  width: 100%;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  background: #ffffff;
+  font-size: 9.5pt;
+  line-height: 1.35;
+}
+
+body.report-print-page #clinical-report .report-page-1,
+body.report-print-page #clinical-report .report-page-2 {
+  width: 100%;
+}
+
+body.report-print-page #clinical-report .report-print-section,
+body.report-print-page #clinical-report .report-header {
+  width: 100%;
+  box-shadow: none !important;
 }
 
 #clinical-report .report-brand-image {
@@ -8,25 +39,17 @@ body.report-print-page {
   image-rendering: crisp-edges;
 }
 
-/* Header accent lines — short decorative separators only (no full-span grid borders) */
 #clinical-report .report-header-accent-h {
   width: 72px;
   height: 1px;
   background: rgba(0, 61, 91, 0.18);
 }
 
-#clinical-report .report-header-accent-v {
-  width: 1px;
-  height: 30px;
-  margin-top: 2px;
-  flex-shrink: 0;
-  background: rgba(0, 61, 91, 0.2);
-}
-
 #clinical-report .report-header-top {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: start;
+  gap: 0.75rem;
 }
 
 #clinical-report .report-header-title {
@@ -43,11 +66,56 @@ body.report-print-page {
 }
 
 #clinical-report .report-header-bottom {
+  display: flex;
+  flex-direction: row;
   align-items: flex-start;
+  gap: 0.75rem;
+}
+
+#clinical-report .report-header-contact {
+  width: 34%;
+  flex-shrink: 0;
+}
+
+#clinical-report .report-header-partners {
+  flex: 1;
+  min-width: 0;
+}
+
+#clinical-report .report-header-partners .grid {
+  gap: 0.5rem;
 }
 
 #clinical-report .report-header-qr-box {
   border: 1px solid rgba(0, 61, 91, 0.08);
+}
+
+#clinical-report .report-participant-grid,
+#clinical-report .report-two-column-section,
+#clinical-report .report-footer-row {
+  display: grid;
+  width: 100%;
+}
+
+#clinical-report .report-participant-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1rem;
+}
+
+#clinical-report .report-two-column-section {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.625rem;
+  align-items: stretch;
+}
+
+#clinical-report .report-two-column-section > * {
+  min-width: 0;
+}
+
+#clinical-report .report-footer-row {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 0.625rem;
+  align-items: stretch;
 }
 
 #clinical-report .report-header-partners .report-brand-image {
@@ -85,7 +153,8 @@ body.report-print-page {
   margin-top: 0.15rem;
 }
 
-#clinical-report .report-screening-questions-table table {
+#clinical-report .report-screening-questions-table table,
+#clinical-report table {
   table-layout: fixed;
   width: 100%;
 }
@@ -106,8 +175,16 @@ body.report-print-page {
 
 @media print {
   @page {
-    size: A4;
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    width: 100%;
     margin: 0;
+    padding: 0;
+    background: #ffffff !important;
   }
 
   body.report-print-page {
@@ -116,43 +193,34 @@ body.report-print-page {
   }
 
   #clinical-report {
-    font-size: 9pt;
-    line-height: 1.4;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    font-size: 9.5pt;
+    line-height: 1.35;
+    -webkit-font-smoothing: antialiased;
   }
 
-  #clinical-report .report-page-1 {
-    break-after: page;
-    page-break-after: always;
-  }
-
+  #clinical-report .report-page-1,
   #clinical-report .report-page-2 {
-    break-before: avoid;
-    page-break-before: avoid;
+    width: 100%;
+    break-after: auto;
+    page-break-after: auto;
+    break-before: auto;
+    page-break-before: auto;
   }
 
-  #clinical-report .report-header-top,
-  #clinical-report .report-header-bottom {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  #clinical-report .report-header-brand,
-  #clinical-report .report-header-contact {
-    width: auto;
+  #clinical-report .report-print-section,
+  #clinical-report .report-header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none !important;
   }
 
   #clinical-report h2,
   #clinical-report h3 {
     letter-spacing: 0.01em;
-  }
-
-  #clinical-report table {
-    table-layout: auto;
-  }
-
-  #clinical-report .report-section-title {
-    word-break: normal;
-    overflow-wrap: normal;
   }
 }

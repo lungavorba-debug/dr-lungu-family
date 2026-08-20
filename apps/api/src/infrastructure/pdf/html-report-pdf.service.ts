@@ -5,7 +5,7 @@ import { AppError } from '../../lib/app-error';
 import { ensurePlaywrightChromiumReady } from './ensure-playwright-chromium';
 import { normalizeParticipantSignatureDataUrl } from './normalize-participant-signature';
 import {
-  REPORT_PDF_MARGINS,
+  REPORT_PDF_CONTENT_HEIGHT_PX,
   REPORT_PDF_VIEWPORT,
   mergePdfDocuments,
 } from './merge-pdf-documents';
@@ -19,9 +19,9 @@ export interface HtmlReportPdfInput {
   participantSignatureDataUrl?: string | null;
 }
 
-/** Printable A4 height in CSS px (96dpi) minus 12mm top/bottom margins. */
+/** Printable A4 height in CSS px (96dpi) minus 10mm top/bottom @page margins. */
 function printableHeightPx(): number {
-  return ((297 - 24) * 96) / 25.4;
+  return REPORT_PDF_CONTENT_HEIGHT_PX;
 }
 
 async function renderReportPrintPage(page: Page, input: HtmlReportPdfInput): Promise<void> {
@@ -75,10 +75,13 @@ async function isolateReportPage(page: Page, target: '1' | '2'): Promise<void> {
     if (article) {
       article.style.margin = '0';
       article.style.padding = '0';
+      article.style.width = '100%';
+      article.style.maxWidth = 'none';
     }
 
     document.body.style.margin = '0';
     document.body.style.padding = '0';
+    document.body.style.width = '100%';
   }, target);
 }
 
@@ -95,7 +98,7 @@ async function pdfForActivePage(page: Page): Promise<Uint8Array> {
   const contentHeight = await readActivePageHeight(page);
   const maxHeight = printableHeightPx();
   const scale =
-    contentHeight > maxHeight ? Math.min(1, Math.max(0.82, maxHeight / contentHeight)) : 1;
+    contentHeight > maxHeight * 1.01 ? Math.min(1, maxHeight / contentHeight) : 1;
 
   if (scale < 1) {
     console.log(
@@ -106,8 +109,8 @@ async function pdfForActivePage(page: Page): Promise<Uint8Array> {
   const pdfBuffer = await page.pdf({
     format: 'A4',
     printBackground: true,
-    preferCSSPageSize: false,
-    margin: { ...REPORT_PDF_MARGINS },
+    preferCSSPageSize: true,
+    margin: { top: '0', right: '0', bottom: '0', left: '0' },
     scale,
   });
 
