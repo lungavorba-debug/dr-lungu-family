@@ -1,6 +1,7 @@
 import type { ClinicalRiskLevel, MedicalMeasurements, ScreeningAnamnesis } from '@medscreen/types';
 
 import { buildDynamicEvaluationSummary } from './build-dynamic-evaluation-summary';
+import { FESTIVAL_EVALUATION_SUMMARY } from './festival-participant-copy';
 
 export {
   buildDynamicEvaluationSummary,
@@ -9,17 +10,16 @@ export {
 } from './build-dynamic-evaluation-summary';
 
 /** @deprecated Use buildDynamicEvaluationSummary instead. */
-export const EVALUATION_SUMMARY_LOW_OPTIMAL =
-  'Valorile măsurate astăzi se încadrează în limite normale.';
+export const EVALUATION_SUMMARY_LOW_OPTIMAL = FESTIVAL_EVALUATION_SUMMARY;
 
 /** @deprecated */
-export const EVALUATION_SUMMARY_MODERATE = 'Atenție moderată la unele valori măsurate.';
+export const EVALUATION_SUMMARY_MODERATE = FESTIVAL_EVALUATION_SUMMARY;
 
 /** @deprecated */
-export const EVALUATION_SUMMARY_HIGH = 'Recomandare importantă: valori care necesită evaluare medicală.';
+export const EVALUATION_SUMMARY_HIGH = FESTIVAL_EVALUATION_SUMMARY;
 
 /** @deprecated */
-export const EVALUATION_SUMMARY_LOW_VALUES = 'Notă: valori sub intervalul obișnuit.';
+export const EVALUATION_SUMMARY_LOW_VALUES = FESTIVAL_EVALUATION_SUMMARY;
 
 export function hasLowVitalMeasurements(_measurements: MedicalMeasurements): boolean {
   return false;

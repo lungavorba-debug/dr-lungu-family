@@ -28,7 +28,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "npm run typecheck -w @medscreen/types && npm run typecheck -w @medscreen/config && npm run typecheck -w @medscreen/shared && npm run typecheck -w @medscreen/ui && npm run typecheck -w @medscreen/api && npm run typecheck -w @medscreen/web",
-    "test:report": "tsx packages/shared/src/report/fixtures/load-fixtures.ts && tsx packages/shared/src/report/test-participant-report-schema.ts && tsx packages/shared/src/clinical/test-participant-view-parity.ts && tsx packages/shared/src/report/test-dynamic-evaluation-summary.ts",
+    "test:report": "tsx packages/shared/src/report/fixtures/load-fixtures.ts && tsx packages/shared/src/report/test-participant-report-schema.ts && tsx packages/shared/src/clinical/test-participant-view-parity.ts && tsx packages/shared/src/report/test-dynamic-evaluation-summary.ts && tsx packages/shared/src/report/test-festival-participant-copy.ts",
     "verify:whatsapp": "node scripts/verify-whatsapp-delivery.mjs",
     "verify:whatsapp:health": "node scripts/verify-whatsapp-health.mjs",
     "test:user-admin": "tsx apps/api/src/application/users/test-user-admin-guards.ts",

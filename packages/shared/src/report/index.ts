@@ -16,6 +16,7 @@ export * from './participant-report.schema';
 export * from './participant-report.constants';
 export * from './participant-report-layout.constants';
 export * from './build-screening-question-display';
+export * from './festival-participant-copy';
 export * from './build-dynamic-evaluation-summary';
 export * from './report-cardiovascular-evaluation';
 export * from './report-measurement-filter';

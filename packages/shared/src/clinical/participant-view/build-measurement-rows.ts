@@ -9,6 +9,7 @@ import {
   classifyWaist,
   type MeasurementBadgeLevel,
 } from './measurement-classifiers';
+import { toFestivalParticipantLabel } from '../../report/festival-participant-copy';
 
 export type { MeasurementBadgeLevel };
 
@@ -37,7 +38,7 @@ function buildBloodPressureRow(measurements: MedicalMeasurements): PremiumMeasur
     parameter: 'Tensiune arterială',
     result: bp,
     referenceRange: classification?.referenceRange ?? '120/80–129/84 mmHg',
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
@@ -49,7 +50,7 @@ function buildPulseRow(measurements: MedicalMeasurements): PremiumMeasurementRow
     parameter: 'Puls',
     result: formatNum(measurements.pulse),
     referenceRange: classification?.referenceRange ?? '60–100',
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
@@ -61,7 +62,7 @@ function buildSpO2Row(measurements: MedicalMeasurements): PremiumMeasurementRow 
     parameter: 'SpO₂',
     result: measurements.oxygen_saturation !== null ? `${formatNum(measurements.oxygen_saturation)}%` : '—',
     referenceRange: classification?.referenceRange ?? '≥95%',
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
@@ -73,7 +74,7 @@ function buildGlucoseRow(measurements: MedicalMeasurements): PremiumMeasurementR
     parameter: 'Glicemie',
     result: measurements.blood_glucose !== null ? formatNum(measurements.blood_glucose) : '—',
     referenceRange: classification?.referenceRange ?? 'á jeun <100',
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
@@ -85,7 +86,7 @@ function buildBmiRow(measurements: MedicalMeasurements): PremiumMeasurementRow {
     parameter: 'IMC',
     result: formatNum(measurements.bmi, 2),
     referenceRange: classification?.referenceRange ?? '18,5–24,9',
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
@@ -97,7 +98,7 @@ function buildWaistRow(measurements: MedicalMeasurements, gender: PatientGender)
     parameter: 'Circumferință abdominală',
     result: measurements.waist_circumference_cm !== null ? `${formatNum(measurements.waist_circumference_cm)} cm` : '—',
     referenceRange: classification?.referenceRange ?? (gender === 'F' ? 'F: <80 cm' : 'M: <94 cm'),
-    interpretation: classification?.label ?? '—',
+    interpretation: classification ? toFestivalParticipantLabel(classification) : '—',
     badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }

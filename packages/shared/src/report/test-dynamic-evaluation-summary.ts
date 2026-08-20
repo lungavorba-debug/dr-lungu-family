@@ -1,5 +1,5 @@
 /**
- * Clinical safety tests — dynamic "Evaluare și recomandări" must match real measurements.
+ * Clinical safety tests — evaluation logic remains evidence-based; copy is festival-neutral.
  * Run: npx tsx packages/shared/src/report/test-dynamic-evaluation-summary.ts
  */
 import assert from 'node:assert/strict';
@@ -7,10 +7,8 @@ import assert from 'node:assert/strict';
 import type { MedicalMeasurements, ScreeningAnamnesis } from '@medscreen/types';
 
 import { classifyBloodPressure } from '../clinical/participant-view/measurement-classifiers';
-import { buildMeasurementRows } from '../clinical/participant-view/build-measurement-rows';
-import { composeParticipantReport } from './composer/compose-participant-report';
 import { buildDynamicEvaluationSummary } from './build-dynamic-evaluation-summary';
-import { loadScenario } from './fixtures/load-fixtures';
+import { FESTIVAL_EVALUATION_SUMMARY } from './festival-participant-copy';
 
 const emptyAnamnesis: ScreeningAnamnesis = {
   smoking_status: 'never',
@@ -51,20 +49,12 @@ const normalBpCase = buildDynamicEvaluationSummary({
   gender: 'F',
 });
 
-assert.match(normalBpCase.summary, /limite normale/i, 'Normal case must state values are within normal limits');
-assert.doesNotMatch(
-  normalBpCase.summary,
-  /peste limitele obișnuite|Hipertensiune|tensiune arterială \(90\/65 mmHg\)/i,
-  'Normal BP must not trigger alarming hypertension text',
-);
-assert.equal(normalBpCase.levelLabel, 'NORMAL');
+assert.equal(normalBpCase.summary, FESTIVAL_EVALUATION_SUMMARY);
+assert.equal(normalBpCase.findings.length, 0);
+assert.equal(normalBpCase.levelLabel, 'INFORMAȚII');
+assert.equal(classifyBloodPressure(baseMeasurements({ systolic_bp: 90, diastolic_bp: 65 }))?.label, 'Optimă');
 
-const bpRow = buildMeasurementRows(baseMeasurements({ systolic_bp: 90, diastolic_bp: 65 }), 'F').find(
-  (row) => row.parameter === 'Tensiune arterială',
-);
-assert.equal(bpRow?.interpretation, 'Optimă');
-
-console.log('[test-dynamic-evaluation-summary] Case 2 — single abnormal value (HT grad 2)');
+console.log('[test-dynamic-evaluation-summary] Case 2 — single abnormal value');
 
 const singleIssue = buildDynamicEvaluationSummary({
   measurements: baseMeasurements({ systolic_bp: 165, diastolic_bp: 102 }),
@@ -72,10 +62,9 @@ const singleIssue = buildDynamicEvaluationSummary({
   gender: 'M',
 });
 
-assert.match(singleIssue.summary, /Hipertensiune grad 2/i);
-assert.match(singleIssue.summary, /165\/102/);
-assert.doesNotMatch(singleIssue.summary, /Glicemie|SpO|Fumător|IMC/i, 'Single-issue summary must not mention unrelated parameters');
+assert.equal(singleIssue.summary, FESTIVAL_EVALUATION_SUMMARY);
 assert.equal(singleIssue.findings.length, 1);
+assert.equal(singleIssue.levelLabel, 'DE DISCUTAT CU MEDICUL');
 
 console.log('[test-dynamic-evaluation-summary] Case 3 — multiple abnormal values + anamnesis');
 
@@ -95,76 +84,7 @@ const multiIssue = buildDynamicEvaluationSummary({
   gender: 'M',
 });
 
-assert.match(multiIssue.summary, /Hipertensiune grad 1/i);
-assert.match(multiIssue.summary, /Prediabet/i);
-assert.match(multiIssue.summary, /Supraponderal|IMC/i);
-assert.match(multiIssue.summary, /Circumferință abdominală/i);
-assert.match(multiIssue.summary, /Fumător activ/i);
-assert.match(multiIssue.summary, /dispnee|Lipsă de aer/i);
-assert.ok(multiIssue.findings.length >= 5, 'Multi-finding case must list several distinct findings');
-assert.doesNotMatch(
-  multiIssue.summary,
-  /peste limitele obișnuite/i,
-  'Must not use deprecated static hypertension boilerplate',
-);
-
-console.log('[test-dynamic-evaluation-summary] Integration — healthy golden scenario report');
-
-const healthy = loadScenario('healthy');
-const healthyReport = composeParticipantReport({
-  participant: {
-    first_name: healthy.participant.first_name,
-    last_name: healthy.participant.last_name,
-    age: healthy.participant.age,
-    gender: healthy.participant.gender,
-    phone: null,
-    city: null,
-  },
-  campaign: healthy.campaign,
-  screeningDate: healthy.captured_at,
-  operatorName: healthy.operatorName,
-  measurements: healthy.measurements,
-  anamnesis: healthy.anamnesis,
-  evaluation: {
-    engine_version: 'test',
-    rule_set_id: 'test',
-    is_demo: false,
-    evaluated_at: healthy.captured_at,
-    screening_id: healthy.screening_id,
-    patient_id: healthy.patient_id,
-    risks: {
-      cardiovascular: {
-        category: 'cardiovascular',
-        level: 'elevated',
-        summary: '',
-        factors: ['Durere toracică raportată'],
-        rule_set_id: 'test',
-        is_demo: false,
-      },
-      diabetes: {
-        category: 'diabetes',
-        level: 'low',
-        summary: '',
-        factors: [],
-        rule_set_id: 'test',
-        is_demo: false,
-      },
-      sleep_apnea: {
-        category: 'sleep_apnea',
-        level: 'low',
-        summary: '',
-        factors: [],
-        rule_set_id: 'test',
-        is_demo: false,
-      },
-    },
-    warnings: [],
-    recommendations: [],
-    interpretation: { summary: '', sections: [] },
-  },
-});
-
-assert.match(healthyReport.layout.cardiovascular_risk.summary, /limite normale/i);
-assert.equal(classifyBloodPressure(healthy.measurements)?.label, 'Optimă');
+assert.equal(multiIssue.summary, FESTIVAL_EVALUATION_SUMMARY);
+assert.ok(multiIssue.findings.length >= 5);
 
 console.log('[test-dynamic-evaluation-summary] All clinical safety assertions passed.');
