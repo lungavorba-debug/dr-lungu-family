@@ -36,7 +36,7 @@ function run(command, args) {
 
 run('npx', ['prisma', 'generate']);
 
-const playwrightInstaller = join(root, 'scripts/install-playwright-chromium.mjs');
-if (existsSync(playwrightInstaller)) {
-  run(process.execPath, [playwrightInstaller]);
+const pdfEngineEnsurer = join(root, 'scripts/ensure-pdf-engine.mjs');
+if (existsSync(pdfEngineEnsurer)) {
+  run(process.execPath, [pdfEngineEnsurer]);
 }

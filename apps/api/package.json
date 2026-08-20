@@ -6,11 +6,14 @@
   "main": "./dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "predev": "node ../../scripts/ensure-pdf-engine.mjs",
     "build": "tsc",
+    "prestart": "node ../../scripts/ensure-pdf-engine.mjs",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist",
-    "install:pdf-engine": "playwright install chromium"
+    "install:pdf-engine": "node ../../scripts/install-playwright-chromium.mjs",
+    "ensure:pdf-engine": "node ../../scripts/ensure-pdf-engine.mjs"
   },
   "dependencies": {
     "@medscreen/config": "*",
@@ -27,6 +30,7 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^9.0.3",
+    "pdf-lib": "^1.17.1",
     "playwright": "^1.51.1",
     "qrcode": "^1.5.4",
     "qrcode-terminal": "^0.12.0",

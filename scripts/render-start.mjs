@@ -1,8 +1,9 @@
 /**
  * Render.com start — works with repo root OR legacy apps/api root directory.
  */
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { resolveApiServerEntry, resolveMonorepoRoot } from './resolve-monorepo-root.mjs';
 
 const root = resolveMonorepoRoot();
@@ -16,6 +17,19 @@ if (!existsSync(serverEntry)) {
 }
 
 const port = process.env.PORT || process.env.API_PORT || '3001';
+
+const ensurePdfEngine = join(root, 'scripts/ensure-pdf-engine.mjs');
+if (existsSync(ensurePdfEngine)) {
+  console.log('[render-start] Ensuring Playwright Chromium for PDF generation…');
+  spawnSync(process.execPath, [ensurePdfEngine], {
+    cwd: root,
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: undefined,
+    },
+  });
+}
 
 console.log(`[render-start] root=${root}`);
 console.log(`[render-start] entry=${serverEntry}`);

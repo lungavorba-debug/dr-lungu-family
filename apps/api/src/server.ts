@@ -18,6 +18,7 @@ import {
   checkWhatsAppCloudConfig,
   printWhatsAppCloudConfigCheck,
 } from './infrastructure/whatsapp/whatsapp-cloud-config.service';
+import { ensurePlaywrightChromiumReady } from './infrastructure/pdf/ensure-playwright-chromium';
 
 const apiRoot = path.join(__dirname, '..');
 const envFilePath = path.join(apiRoot, '../.env');
@@ -96,6 +97,13 @@ function shouldAutoInitializeWhatsAppWeb(): boolean {
 
   return true;
 }
+
+void ensurePlaywrightChromiumReady().catch((error: unknown) => {
+  console.warn(
+    '[pdf] Chromium preload failed — will retry automatically on first PDF request:',
+    error instanceof Error ? error.message : error,
+  );
+});
 
 app.listen(env.API_PORT, env.API_HOST, () => {
   console.log(`[api] Server listening on http://${env.API_HOST}:${env.API_PORT}`);

@@ -3,6 +3,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { resolveMonorepoRoot } from './resolve-monorepo-root.mjs';
 
 const root = resolveMonorepoRoot();
@@ -41,5 +42,15 @@ run('npm rebuild bcrypt', 'npm', ['rebuild', 'bcrypt']);
 run('prisma generate', 'npx', ['prisma', 'generate']);
 run('build workspace packages', 'npm', ['run', 'build:packages']);
 run('build API', 'npm', ['run', 'build', '--workspace=@medscreen/api']);
+
+run('install Playwright Chromium', process.execPath, [
+  join(root, 'scripts/install-playwright-chromium.mjs'),
+], {
+  env: {
+    ...process.env,
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: undefined,
+    SKIP_POSTINSTALL: undefined,
+  },
+});
 
 console.log('[render-build] Done.');

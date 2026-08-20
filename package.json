@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "setup": "node scripts/setup-dev-env.mjs && docker compose up -d postgres && npm run db:push && npm run db:seed",
-    "predev": "node scripts/setup-dev-env.mjs && node scripts/free-dev-ports.mjs",
+    "predev": "node scripts/setup-dev-env.mjs && node scripts/free-dev-ports.mjs && node scripts/ensure-pdf-engine.mjs",
     "dev": "concurrently -n api,web -c green,blue \"npm run dev -w @medscreen/api\" \"npm run dev -w @medscreen/web\"",
     "verify:dev": "node scripts/verify-dev-stack.mjs",
     "dev:web": "npm run dev -w @medscreen/web",
@@ -20,6 +20,7 @@
     "build:vercel": "node scripts/vercel-build.mjs",
     "start:render": "node scripts/render-start.mjs",
     "install:pdf-engine": "node scripts/install-playwright-chromium.mjs",
+    "ensure:pdf-engine": "node scripts/ensure-pdf-engine.mjs",
     "test:pdf-engine": "node scripts/verify-playwright-chromium.mjs",
     "test:operator-guides": "tsx apps/web/src/features/screening/clinical/lib/test-operator-conversation-guides.ts",
     "lint": "eslint .",
