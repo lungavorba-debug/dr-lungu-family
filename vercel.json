@@ -1,5 +1,7 @@
 {
-  "buildCommand": "npm run build --workspace=@medscreen/web",
+  "buildCommand": "node scripts/vercel-build.mjs",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install --ignore-scripts"
+  "installCommand": "echo \"Install handled by vercel-build.mjs\"",
+  "framework": null,
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }

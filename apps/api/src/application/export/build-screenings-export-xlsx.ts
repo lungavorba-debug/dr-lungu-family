@@ -1,7 +1,11 @@
 import ExcelJS from 'exceljs';
 
 import type { ScreeningExportRecord } from '../../domain/repositories/screening.repository';
-import { EXPORT_SCREENINGS_HEADERS, mapScreeningExportRow } from './export-screenings-shared';
+import {
+  EXPORT_SCREENINGS_HEADERS,
+  mapScreeningExportRow,
+  resolveSignatureImageExtension,
+} from './export-screenings-shared';
 
 const HEADER_FILL: ExcelJS.Fill = {
   type: 'pattern',
@@ -15,6 +19,29 @@ const THIN_BORDER: Partial<ExcelJS.Borders> = {
   bottom: { style: 'thin', color: { argb: 'FFCBD5E1' } },
   right: { style: 'thin', color: { argb: 'FFCBD5E1' } },
 };
+
+const SIGNATURE_COLUMN_INDEX = EXPORT_SCREENINGS_HEADERS.indexOf('Semnatura') + 1;
+
+function embedSignatureImage(
+  workbook: ExcelJS.Workbook,
+  worksheet: ExcelJS.Worksheet,
+  rowIndex: number,
+  record: ScreeningExportRecord,
+): void {
+  if (!record.signatureImageBase64) {
+    return;
+  }
+
+  const imageId = workbook.addImage({
+    base64: record.signatureImageBase64,
+    extension: resolveSignatureImageExtension(record.signatureMimeType),
+  });
+
+  worksheet.addImage(imageId, {
+    tl: { col: SIGNATURE_COLUMN_INDEX - 1 + 0.08, row: rowIndex - 1 + 0.12 },
+    ext: { width: 120, height: 42 },
+  });
+}
 
 export async function buildScreeningsExportXlsx(rows: ScreeningExportRecord[]): Promise<Buffer> {
   const workbook = new ExcelJS.Workbook();
@@ -41,9 +68,16 @@ export async function buildScreeningsExportXlsx(rows: ScreeningExportRecord[]): 
     const values = mapScreeningExportRow(record);
     const row = worksheet.addRow(values);
     row.alignment = { vertical: 'top', wrapText: true };
+    if (record.signatureImageBase64) {
+      row.height = 48;
+    }
     row.eachCell((cell) => {
       cell.border = THIN_BORDER;
     });
+
+    if (record.signatureImageBase64) {
+      embedSignatureImage(workbook, worksheet, row.number, record);
+    }
   }
 
   worksheet.autoFilter = {
@@ -59,6 +93,11 @@ export async function buildScreeningsExportXlsx(rows: ScreeningExportRecord[]): 
       const value = cell.value == null ? '' : String(cell.value);
       maxLength = Math.max(maxLength, value.length);
     });
+
+    if (header === 'Semnatura') {
+      column.width = 22;
+      return;
+    }
 
     column.width = Math.min(Math.max(maxLength + 2, 12), 40);
   });

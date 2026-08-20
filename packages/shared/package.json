@@ -28,13 +28,10 @@
 
   "scripts": {
 
-    "build": "tsc",
-
+    "build": "rimraf dist tsconfig.tsbuildinfo && tsc",
     "dev": "tsc --watch",
-
     "typecheck": "tsc --noEmit",
-
-    "clean": "rimraf dist"
+    "clean": "rimraf dist tsconfig.tsbuildinfo"
 
   },
 

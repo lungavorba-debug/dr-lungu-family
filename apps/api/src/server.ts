@@ -85,11 +85,29 @@ function printWhatsAppStartupBanner(): void {
   console.log('[whatsapp-web] QR page: http://localhost:' + env.API_PORT + '/qr');
 }
 
+function shouldAutoInitializeWhatsAppWeb(): boolean {
+  if (process.env.WHATSAPP_WEB_ENABLED === 'false') {
+    return false;
+  }
+
+  if (process.env.PUPPETEER_SKIP_DOWNLOAD === 'true') {
+    return false;
+  }
+
+  return true;
+}
+
 app.listen(env.API_PORT, env.API_HOST, () => {
   console.log(`[api] Server listening on http://${env.API_HOST}:${env.API_PORT}`);
   printSmtpStartupBanner();
   printWhatsAppStartupBanner();
-  whatsAppService.initialize();
+  if (shouldAutoInitializeWhatsAppWeb()) {
+    whatsAppService.initialize();
+  } else {
+    console.log(
+      '[whatsapp-web] Auto-init skipped (Puppeteer/Chrome unavailable). Use Setări → WhatsApp to connect manually on hosts with Chrome, or use „Trimite manual”.',
+    );
+  }
   if (isWhatsAppDeliveryConfigured(env)) {
     void checkWhatsAppCloudConfig(env).then(printWhatsAppCloudConfigCheck);
   }

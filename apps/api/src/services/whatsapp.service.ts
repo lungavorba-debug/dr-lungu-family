@@ -404,6 +404,14 @@ class WhatsAppService {
       return;
     }
 
+    const chromeExecutable = resolveChromeExecutable();
+    if (!chromeExecutable && process.env.PUPPETEER_SKIP_DOWNLOAD === 'true') {
+      this.recordFailure(
+        'Chrome/Puppeteer nu este disponibil pe acest server (deploy cloud). Folosiți „Trimite manual” (wa.me) sau conectați WhatsApp pe un host local cu Chrome.',
+      );
+      return;
+    }
+
     if ((this.isInitializing || this.isReconnecting) && !this.isInitializationStuck()) {
       console.log('[whatsapp-web] Conectare deja în curs.');
       return;
