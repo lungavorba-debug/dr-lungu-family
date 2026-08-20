@@ -191,7 +191,7 @@ export function ScreeningReportPage() {
           disabled={isGenerating}
           onClick={handleContinueToSignature}
         >
-          {isGenerating ? 'Se generează PDF...' : 'Continuă la semnătură →'}
+          Continuă la semnătură →
         </StickyActionButton>
       </StickyScreeningActionBar>
     </div>

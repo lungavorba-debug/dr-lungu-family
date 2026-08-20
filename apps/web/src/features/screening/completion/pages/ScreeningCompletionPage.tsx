@@ -13,7 +13,8 @@ import { useScreeningDeliveries } from '../../delivery/hooks/useScreeningDeliver
 import { useStartNewScreening } from '../../hooks/useStartNewScreening';
 import { useScreeningSession } from '../../context/ScreeningSessionContext';
 import { loadScreeningPdf } from '../../report/lib/pdf-session-storage';
-import { loadScreeningSignature } from '../../signature/lib/signature-session-storage';
+import { useGenerateReportPdf } from '../../report/hooks/useGenerateReportPdf';
+import { loadScreeningSignature, signatureToDataUrl } from '../../signature/lib/signature-session-storage';
 import { buildClinicalReportProps } from '../../report/lib/build-clinical-report-props';
 import { useCompleteScreening } from '../hooks/useCompleteScreening';
 import { useDeliveryAvailability } from '../../delivery/hooks/useDeliveryAvailability';
@@ -93,7 +94,9 @@ export function ScreeningCompletionPage() {
   const { enqueueScreening } = useSyncQueue();
   const clinicSettingsSnapshot = useClinicSettingsSnapshot();
   const completionReportProps = useCompletionReportProps();
+  const { generate, isGenerating: isRegeneratingPdf, error: pdfRegenError } = useGenerateReportPdf();
   const persistAttemptedRef = useRef(false);
+  const pdfRegenAttemptedRef = useRef(false);
   const [persistMessage, setPersistMessage] = useState<string | null>(null);
   const [persistError, setPersistError] = useState<string | null>(null);
   const [queuedLocally, setQueuedLocally] = useState(false);
@@ -125,6 +128,34 @@ export function ScreeningCompletionPage() {
     if (participantSignature || !resolvedSignature) return;
     setParticipantSignature(resolvedSignature);
   }, [participantSignature, resolvedSignature, setParticipantSignature]);
+
+  useEffect(() => {
+    if (resolvedPdf || !resolvedSignature || !completionReportProps || pdfRegenAttemptedRef.current) {
+      return;
+    }
+
+    pdfRegenAttemptedRef.current = true;
+
+    void (async () => {
+      const pdf = await generate({
+        ...completionReportProps,
+        participantSignatureDataUrl: signatureToDataUrl(resolvedSignature),
+      });
+
+      if (pdf) {
+        setGeneratedPdf(pdf);
+        return;
+      }
+
+      pdfRegenAttemptedRef.current = false;
+    })();
+  }, [
+    completionReportProps,
+    generate,
+    resolvedPdf,
+    resolvedSignature,
+    setGeneratedPdf,
+  ]);
   const serverPersisted = Boolean(persistMessage) && !persistError && !queuedLocally;
   const locallyQueued = queuedLocally && Boolean(persistMessage) && !persistError;
   const {
@@ -296,12 +327,24 @@ export function ScreeningCompletionPage() {
     );
   }
 
-  if (!activePatient || !clinicalEvaluation || !resolvedPdf) {
+  if (!activePatient || !clinicalEvaluation) {
     return <Navigate to="/screening/report" replace />;
   }
 
   if (!resolvedSignature) {
     return <Navigate to="/screening/signature" replace />;
+  }
+
+  if (!resolvedPdf) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-600">
+        {isRegeneratingPdf
+          ? 'Se generează PDF-ul final cu semnătura participantului...'
+          : pdfRegenError
+            ? `Nu s-a putut genera PDF-ul: ${pdfRegenError}`
+            : 'Se pregătește PDF-ul final...'}
+      </div>
+    );
   }
 
   return (

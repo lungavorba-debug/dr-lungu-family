@@ -117,7 +117,12 @@ export function ScreeningSignaturePage() {
       return;
     }
 
-    if (!hasInk || isCanvasBlank(canvas)) {
+    if (!hasInk && isCanvasBlank(canvas)) {
+      setSaveError('Semnătura participantului este obligatorie.');
+      return;
+    }
+
+    if (isCanvasBlank(canvas)) {
       setSaveError('Semnătura participantului este obligatorie.');
       return;
     }
@@ -135,13 +140,15 @@ export function ScreeningSignaturePage() {
         participantSignatureDataUrl: signatureDataUrl,
       });
 
-      if (!pdf) {
-        setSaveError('Semnătura a fost salvată, dar PDF-ul nu a putut fi regenerat cu semnătura.');
-        return;
+      if (pdf) {
+        setGeneratedPdf(pdf);
+        setSaveMessage('Semnătura a fost salvată cu succes. PDF-ul final a fost generat.');
+      } else {
+        setSaveMessage(
+          'Semnătura a fost salvată. PDF-ul final va fi regenerat la finalizarea screeningului.',
+        );
       }
 
-      setGeneratedPdf(pdf);
-      setSaveMessage('Semnătura a fost salvată cu succes. PDF-ul final a fost generat.');
       navigate('/screening/complete', { replace: true });
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Nu s-a putut salva semnătura.');
@@ -191,7 +198,7 @@ export function ScreeningSignaturePage() {
 
       <StickyScreeningActionBar>
         <StickyActionButton
-          disabled={isSaving || isGenerating || !hasInk}
+          disabled={isSaving || isGenerating}
           onClick={() => void handleSaveSignature()}
         >
           {isSaving || isGenerating ? 'Se salvează...' : 'Salvează semnătura'}

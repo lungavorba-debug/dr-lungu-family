@@ -35,8 +35,17 @@ export function signatureFromCanvas(
   screeningId: string,
   participantName: string,
 ): StoredParticipantSignature {
-  const dataUrl = canvas.toDataURL('image/png', 1);
+  if (isCanvasBlank(canvas)) {
+    throw new Error('Semnătura este goală.');
+  }
+
+  const dataUrl = canvas.toDataURL('image/png');
   const image_base64 = dataUrl.replace(/^data:image\/png;base64,/, '');
+
+  if (!image_base64) {
+    throw new Error('Nu s-a putut exporta semnătura din canvas.');
+  }
+
   return {
     image_base64,
     mime_type: 'image/png',
@@ -50,14 +59,26 @@ export function signatureToDataUrl(signature: StoredParticipantSignature): strin
   return `data:${signature.mime_type};base64,${signature.image_base64}`;
 }
 
+/** Detects ink on canvas — tolerant to anti-aliasing from touch/stylus strokes. */
 export function isCanvasBlank(canvas: HTMLCanvasElement): boolean {
-  const context = canvas.getContext('2d');
-  if (!context) return true;
+  const context = canvas.getContext('2d', { willReadFrequently: true });
+  if (!context || canvas.width === 0 || canvas.height === 0) return true;
+
   const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+
   for (let i = 0; i < data.length; i += 4) {
-    if (data[i] !== 255 || data[i + 1] !== 255 || data[i + 2] !== 255) {
+    const red = data[i] ?? 255;
+    const green = data[i + 1] ?? 255;
+    const blue = data[i + 2] ?? 255;
+
+    if (red < 248 || green < 248 || blue < 248) {
       return false;
     }
   }
+
   return true;
+}
+
+export function canvasHasInk(canvas: HTMLCanvasElement): boolean {
+  return !isCanvasBlank(canvas);
 }

@@ -23,6 +23,7 @@ import { VoiceScreeningAssistantButton } from '../conversation/components/VoiceS
 import { applyVoiceExtractionToDemographics, type DemographicsFieldHints } from '../conversation/lib/apply-voice-extraction';
 import { useVoiceScreeningAssistant } from '../conversation/hooks/useVoiceScreeningAssistant';
 import { useScreeningDemographics } from '../conversation/hooks/useScreeningDemographics';
+import { OPERATOR_AI_ASSISTANT_ENABLED } from '../config/operator-ui';
 
 export function ScreeningConversationPage() {
   const navigate = useNavigate();
@@ -174,18 +175,20 @@ export function ScreeningConversationPage() {
             missingLabels={CONVERSATION_FIELD_LABELS}
           />
 
-          <VoiceScreeningAssistantButton
-            status={voiceAssistant.status}
-            recordingSeconds={voiceAssistant.recordingSeconds}
-            error={voiceAssistant.error}
-            aiLoading={voiceAssistant.aiLoading}
-            aiUnavailable={voiceAssistant.aiUnavailable}
-            aiProvider={voiceAssistant.aiProvider}
-            isSupported={voiceAssistant.isSupported}
-            onStart={() => void voiceAssistant.startRecording()}
-            onStop={() => void handleStopVoiceAssistant()}
-            onRefreshAi={() => void voiceAssistant.refreshAiAvailability()}
-          />
+          {OPERATOR_AI_ASSISTANT_ENABLED ? (
+            <VoiceScreeningAssistantButton
+              status={voiceAssistant.status}
+              recordingSeconds={voiceAssistant.recordingSeconds}
+              error={voiceAssistant.error}
+              aiLoading={voiceAssistant.aiLoading}
+              aiUnavailable={voiceAssistant.aiUnavailable}
+              aiProvider={voiceAssistant.aiProvider}
+              isSupported={voiceAssistant.isSupported}
+              onStart={() => void voiceAssistant.startRecording()}
+              onStop={() => void handleStopVoiceAssistant()}
+              onRefreshAi={() => void voiceAssistant.refreshAiAvailability()}
+            />
+          ) : null}
 
           <DemographicsForm form={form} fieldHints={fieldHints} onChange={updateField} />
 

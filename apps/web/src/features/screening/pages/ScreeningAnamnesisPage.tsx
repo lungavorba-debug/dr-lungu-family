@@ -19,6 +19,7 @@ import {
   scrollToAnamnesisField,
 } from '../conversation/types/anamnesis-form';
 import { useAuth } from '../../auth/context/AuthContext';
+import { OPERATOR_AI_ASSISTANT_ENABLED } from '../config/operator-ui';
 
 export function ScreeningAnamnesisPage() {
   const navigate = useNavigate();
@@ -172,25 +173,27 @@ export function ScreeningAnamnesisPage() {
           </button>
         </div>
 
-        <AiFloatingWidget
-          aiStatus={aiStatus}
-          recordingSeconds={recordingSeconds}
-          aiMode={aiMode}
-          transcriptionError={transcriptionError}
-          recordingError={recordingError}
-          aiUnavailable={aiUnavailable}
-          isListening={isListening}
-          isPaused={isPaused}
-          isTranscribing={isTranscribing}
-          isExtracting={isExtracting}
-          isProcessing={isProcessing}
-          assistantStarted={assistantStarted}
-          onStart={() => void startRecording()}
-          onPause={() => void pauseRecording()}
-          onResume={() => void resumeRecording()}
-          onStop={() => void stopRecording()}
-          onRetryTranscription={() => void retryTranscription()}
-        />
+        {OPERATOR_AI_ASSISTANT_ENABLED ? (
+          <AiFloatingWidget
+            aiStatus={aiStatus}
+            recordingSeconds={recordingSeconds}
+            aiMode={aiMode}
+            transcriptionError={transcriptionError}
+            recordingError={recordingError}
+            aiUnavailable={aiUnavailable}
+            isListening={isListening}
+            isPaused={isPaused}
+            isTranscribing={isTranscribing}
+            isExtracting={isExtracting}
+            isProcessing={isProcessing}
+            assistantStarted={assistantStarted}
+            onStart={() => void startRecording()}
+            onPause={() => void pauseRecording()}
+            onResume={() => void resumeRecording()}
+            onStop={() => void stopRecording()}
+            onRetryTranscription={() => void retryTranscription()}
+          />
+        ) : null}
       </div>
     </ScreeningStepForwardGuard>
   );

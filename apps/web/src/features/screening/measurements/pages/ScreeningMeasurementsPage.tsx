@@ -5,6 +5,7 @@ import { ApiClientError } from '../../../../shared/lib/api-client';
 import { useTouchNumericInput } from '../../../../shared/hooks/useTouchNumericInput';
 import { useCampaign } from '../../../campaign/context/CampaignContext';
 import { ScreeningParticipantBanner } from '../../components/ScreeningParticipantBanner';
+import { OPERATOR_AI_ASSISTANT_ENABLED } from '../../config/operator-ui';
 import { VoiceScreeningAssistantButton } from '../../conversation/components/VoiceScreeningAssistantButton';
 import {
   applyVoiceExtractionToMeasurements,
@@ -425,18 +426,20 @@ export function ScreeningMeasurementsPage() {
           ) : null}
         </header>
 
-        <VoiceScreeningAssistantButton
-          status={voiceAssistant.status}
-          recordingSeconds={voiceAssistant.recordingSeconds}
-          error={voiceAssistant.error}
-          aiLoading={voiceAssistant.aiLoading}
-          aiUnavailable={voiceAssistant.aiUnavailable}
-          aiProvider={voiceAssistant.aiProvider}
-          isSupported={voiceAssistant.isSupported}
-          onStart={() => void voiceAssistant.startRecording()}
-          onStop={() => void handleStopVoiceAssistant()}
-          onRefreshAi={() => void voiceAssistant.refreshAiAvailability()}
-        />
+        {OPERATOR_AI_ASSISTANT_ENABLED ? (
+          <VoiceScreeningAssistantButton
+            status={voiceAssistant.status}
+            recordingSeconds={voiceAssistant.recordingSeconds}
+            error={voiceAssistant.error}
+            aiLoading={voiceAssistant.aiLoading}
+            aiUnavailable={voiceAssistant.aiUnavailable}
+            aiProvider={voiceAssistant.aiProvider}
+            isSupported={voiceAssistant.isSupported}
+            onStart={() => void voiceAssistant.startRecording()}
+            onStop={() => void handleStopVoiceAssistant()}
+            onRefreshAi={() => void voiceAssistant.refreshAiAvailability()}
+          />
+        ) : null}
 
         <div ref={setSectionRef('blood-pressure')}>
         <Section title="Tensiune arterială">

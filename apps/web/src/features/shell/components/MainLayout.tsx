@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../auth/context/AuthContext';
+import { shouldHideShellFooter } from '../../screening/config/operator-ui';
 import { getNavItemsForRole } from '../config/navigation';
 import { AppFooter } from './AppFooter';
 import { BreadcrumbNav } from './BreadcrumbNav';
@@ -9,7 +10,9 @@ import { TopNavBar } from './TopNavBar';
 
 export function MainLayout() {
   const { user } = useAuth();
+  const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const showFooter = !shouldHideShellFooter(location.pathname);
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -30,7 +33,7 @@ export function MainLayout() {
             <Outlet />
           </div>
         </main>
-        <AppFooter />
+        {showFooter ? <AppFooter /> : null}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { TranscriptProvider, TranscriptSegment } from '../types/providers';
+import { createId } from '../../../../shared/lib/create-id';
 
 export class MockTranscriptProvider implements TranscriptProvider {
   private segments: TranscriptSegment[] = [];
@@ -19,7 +20,7 @@ export class MockTranscriptProvider implements TranscriptProvider {
   append(segment: Omit<TranscriptSegment, 'id' | 'timestamp'>): void {
     const next: TranscriptSegment = {
       ...segment,
-      id: crypto.randomUUID(),
+      id: createId('transcript'),
       timestamp: Date.now(),
     };
     this.segments = [...this.segments, next];

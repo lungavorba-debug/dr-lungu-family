@@ -19,6 +19,8 @@ function assert(label: string, condition: boolean): void {
   console.log(`  ok: ${label}`);
 }
 
+const operatorUiSource = read('config/operator-ui.ts');
+const mainLayoutSource = read('../shell/components/MainLayout.tsx');
 const anamnesisPage = read('pages/ScreeningAnamnesisPage.tsx');
 const conversationPage = read('pages/ScreeningConversationPage.tsx');
 const measurementsPage = read('measurements/pages/ScreeningMeasurementsPage.tsx');
@@ -30,10 +32,12 @@ const routerSource = read('../../app/router.tsx');
 
 console.log('AI assistant verification');
 
-assert('widget renders only on anamnesis page', anamnesisPage.includes('<AiFloatingWidget'));
-assert('conversation page does not render widget', !conversationPage.includes('AiFloatingWidget'));
-assert('measurements page does not render widget', !measurementsPage.includes('AiFloatingWidget'));
+assert('operator UI disables AI assistant', operatorUiSource.includes('OPERATOR_AI_ASSISTANT_ENABLED = false'));
+assert('anamnesis page gates widget behind flag', anamnesisPage.includes('OPERATOR_AI_ASSISTANT_ENABLED'));
+assert('conversation page gates voice assistant behind flag', conversationPage.includes('OPERATOR_AI_ASSISTANT_ENABLED'));
+assert('measurements page gates voice assistant behind flag', measurementsPage.includes('OPERATOR_AI_ASSISTANT_ENABLED'));
 assert('results page does not render widget', !resultsPage.includes('AiFloatingWidget'));
+assert('shell footer hidden during screening', mainLayoutSource.includes('shouldHideShellFooter'));
 assert('widget portals to document.body', widgetSource.includes('createPortal(widget, document.body)'));
 assert('widget exposes Start control', widgetSource.includes('onStart'));
 assert('widget exposes Pause control', widgetSource.includes('onPause'));
