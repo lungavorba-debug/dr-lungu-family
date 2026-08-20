@@ -58,22 +58,10 @@ export function buildParticipantMeasurementRows(
 export function formatMeasurementNote(
   interpretation: string,
   badgeLevel: MeasurementBadgeLevel,
-  parameter?: string,
+  _parameter?: string,
 ): string {
   if (interpretation === '—' || interpretation.trim() === '') return '';
   if (badgeLevel === 'neutral') return '';
-  if (interpretation === 'Normală' || interpretation === 'Normal') return 'Normal';
-  if (interpretation === 'Crescută') {
-    if (parameter === 'Circumferință abdominală') return 'Crescută';
-    return 'Peste interval';
-  }
-  if (interpretation === 'Crescut') return 'Supraponderal';
-  if (interpretation === 'Scăzută') {
-    if (parameter === 'Tensiune arterială') return 'Sub interval';
-    if (parameter === 'Glicemie') return 'Scăzut';
-    return interpretation;
-  }
-  if (interpretation === 'Scăzut') return 'Scăzut';
   return interpretation;
 }
 

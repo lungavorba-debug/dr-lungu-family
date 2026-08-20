@@ -22,8 +22,10 @@ export function isBloodPressureElevated(measurements: MedicalMeasurements): bool
 
 export function isBloodPressureLow(measurements: MedicalMeasurements): boolean {
   return (
-    measurements.systolic_bp !== null &&
-    measurements.systolic_bp < CLINICAL_THRESHOLDS.bloodPressure.lowSystolic
+    (measurements.systolic_bp !== null &&
+      measurements.systolic_bp < CLINICAL_THRESHOLDS.bloodPressure.lowSystolic) ||
+    (measurements.diastolic_bp !== null &&
+      measurements.diastolic_bp < CLINICAL_THRESHOLDS.bloodPressure.lowDiastolic)
   );
 }
 

@@ -1,21 +1,16 @@
 import type { MedicalMeasurements, PatientGender } from '@medscreen/types';
 
-import { CLINICAL_THRESHOLDS } from '../thresholds';
 import {
-  isBloodPressureCritical,
-  isBloodPressureElevated,
-  isBloodPressureLow,
-  isBmiElevated,
-  isGlucoseElevated,
-  isPulseHigh,
-  isPulseLow,
-  isSpO2Low,
-  isWaistElevated,
-} from './threshold-evaluators';
+  classifyBloodPressure,
+  classifyBmi,
+  classifyGlucose,
+  classifyPulse,
+  classifySpO2,
+  classifyWaist,
+  type MeasurementBadgeLevel,
+} from './measurement-classifiers';
 
-export { isBloodPressureAbnormal } from './threshold-evaluators';
-
-export type MeasurementBadgeLevel = 'normal' | 'attention' | 'critical' | 'neutral';
+export type { MeasurementBadgeLevel };
 
 export interface PremiumMeasurementRow {
   parameter: string;
@@ -36,157 +31,74 @@ function buildBloodPressureRow(measurements: MedicalMeasurements): PremiumMeasur
       ? `${formatNum(measurements.systolic_bp)} / ${formatNum(measurements.diastolic_bp)}`
       : '—';
 
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (measurements.systolic_bp !== null || measurements.diastolic_bp !== null) {
-    if (isBloodPressureCritical(measurements)) {
-      badgeLevel = 'critical';
-      interpretation = 'Crescută';
-    } else if (isBloodPressureElevated(measurements)) {
-      badgeLevel = 'attention';
-      interpretation = 'Crescută';
-    } else if (isBloodPressureLow(measurements)) {
-      badgeLevel = 'attention';
-      interpretation = 'Scăzută';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normală';
-    }
-  }
+  const classification = classifyBloodPressure(measurements);
 
   return {
     parameter: 'Tensiune arterială',
     result: bp,
-    referenceRange: 'sub 140/90',
-    interpretation,
-    badgeLevel,
+    referenceRange: classification?.referenceRange ?? '120/80–129/84 mmHg',
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
 function buildPulseRow(measurements: MedicalMeasurements): PremiumMeasurementRow {
-  const pulse = measurements.pulse;
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (pulse !== null) {
-    if (isPulseLow(pulse)) {
-      badgeLevel = 'attention';
-      interpretation = 'Scăzut';
-    } else if (isPulseHigh(pulse)) {
-      badgeLevel = 'attention';
-      interpretation = 'Crescut';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normal';
-    }
-  }
+  const classification = classifyPulse(measurements.pulse);
 
   return {
     parameter: 'Puls',
-    result: formatNum(pulse),
-    referenceRange: '60–100',
-    interpretation,
-    badgeLevel,
+    result: formatNum(measurements.pulse),
+    referenceRange: classification?.referenceRange ?? '60–100',
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
 function buildSpO2Row(measurements: MedicalMeasurements): PremiumMeasurementRow {
-  const spo2 = measurements.oxygen_saturation;
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (spo2 !== null) {
-    if (isSpO2Low(spo2)) {
-      badgeLevel = 'critical';
-      interpretation = 'Scăzută';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normală';
-    }
-  }
+  const classification = classifySpO2(measurements.oxygen_saturation);
 
   return {
     parameter: 'SpO₂',
-    result: spo2 !== null ? `${formatNum(spo2)}%` : '—',
-    referenceRange: 'min. 95%',
-    interpretation,
-    badgeLevel,
+    result: measurements.oxygen_saturation !== null ? `${formatNum(measurements.oxygen_saturation)}%` : '—',
+    referenceRange: classification?.referenceRange ?? '≥95%',
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
 function buildGlucoseRow(measurements: MedicalMeasurements): PremiumMeasurementRow {
-  const glucose = measurements.blood_glucose;
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (glucose !== null) {
-    if (isGlucoseElevated(measurements)) {
-      badgeLevel = 'attention';
-      interpretation = 'Crescută';
-    } else if (glucose < CLINICAL_THRESHOLDS.glucose.low) {
-      badgeLevel = 'attention';
-      interpretation = 'Scăzută';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normală';
-    }
-  }
+  const classification = classifyGlucose(measurements);
 
   return {
     parameter: 'Glicemie',
-    result: glucose !== null ? formatNum(glucose) : '—',
-    referenceRange: '70–99',
-    interpretation,
-    badgeLevel,
+    result: measurements.blood_glucose !== null ? formatNum(measurements.blood_glucose) : '—',
+    referenceRange: classification?.referenceRange ?? 'á jeun <100',
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
 function buildBmiRow(measurements: MedicalMeasurements): PremiumMeasurementRow {
-  const bmi = measurements.bmi;
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (bmi !== null) {
-    if (isBmiElevated(bmi)) {
-      badgeLevel = 'attention';
-      interpretation = 'Crescut';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normal';
-    }
-  }
+  const classification = classifyBmi(measurements.bmi);
 
   return {
     parameter: 'IMC',
-    result: formatNum(bmi, 2),
-    referenceRange: '18,5–24,9',
-    interpretation,
-    badgeLevel,
+    result: formatNum(measurements.bmi, 2),
+    referenceRange: classification?.referenceRange ?? '18,5–24,9',
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
 function buildWaistRow(measurements: MedicalMeasurements, gender: PatientGender): PremiumMeasurementRow {
-  const waist = measurements.waist_circumference_cm;
-  let badgeLevel: MeasurementBadgeLevel = 'neutral';
-  let interpretation = '—';
-
-  if (waist !== null) {
-    if (isWaistElevated(waist, gender)) {
-      badgeLevel = 'attention';
-      interpretation = 'Crescută';
-    } else {
-      badgeLevel = 'normal';
-      interpretation = 'Normală';
-    }
-  }
+  const classification = classifyWaist(measurements.waist_circumference_cm, gender);
 
   return {
     parameter: 'Circumferință abdominală',
-    result: waist !== null ? `${formatNum(waist)} cm` : '—',
-    referenceRange: gender === 'F' ? 'sub 80 cm' : 'sub 94 cm',
-    interpretation,
-    badgeLevel,
+    result: measurements.waist_circumference_cm !== null ? `${formatNum(measurements.waist_circumference_cm)} cm` : '—',
+    referenceRange: classification?.referenceRange ?? (gender === 'F' ? 'F: <80 cm' : 'M: <94 cm'),
+    interpretation: classification?.label ?? '—',
+    badgeLevel: classification?.badgeLevel ?? 'neutral',
   };
 }
 
@@ -230,3 +142,5 @@ export function buildMeasurementRows(
 
 /** @deprecated Use buildMeasurementRows — alias retained for legacy report imports. */
 export const buildPremiumMeasurementRows = buildMeasurementRows;
+
+export { isBloodPressureAbnormal } from './threshold-evaluators';

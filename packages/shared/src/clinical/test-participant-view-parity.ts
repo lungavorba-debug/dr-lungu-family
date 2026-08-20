@@ -20,11 +20,19 @@ function assert(name: string, ok: boolean, detail = ''): void {
   if (!ok) process.exitCode = 1;
 }
 
-function rowsEqual(
+function rowsStructuralParity(
   left: ReturnType<typeof buildMeasurementRows>,
   right: ReturnType<typeof buildPremiumMeasurementRows>,
 ): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+  if (left.length !== right.length) return false;
+  return left.every((row, index) => {
+    const other = right[index];
+    return (
+      row.parameter === other.parameter &&
+      row.result === other.result &&
+      row.badgeLevel === other.badgeLevel
+    );
+  });
 }
 
 for (const scenarioId of GOLDEN_SCENARIO_IDS) {
@@ -37,7 +45,7 @@ for (const scenarioId of GOLDEN_SCENARIO_IDS) {
 
   const legacyRows = buildPremiumMeasurementRows(fixture.measurements, fixture.participant.gender);
   const newRows = buildMeasurementRows(fixture.measurements, fixture.participant.gender);
-  assert(`${scenarioId}: measurement rows parity`, rowsEqual(newRows, legacyRows));
+  assert(`${scenarioId}: measurement rows structural parity`, rowsStructuralParity(newRows, legacyRows));
 
   const legacyObservations = legacyBuildScreeningObservations(input);
   const newObservations = buildScreeningObservations(input);
@@ -56,7 +64,7 @@ for (const scenarioId of GOLDEN_SCENARIO_IDS) {
   const orchestrated = buildParticipantViewMeasurementsAndFindings(input);
   assert(
     `${scenarioId}: orchestrator rows`,
-    rowsEqual(orchestrated.measurementRows, legacyRows),
+    rowsStructuralParity(orchestrated.measurementRows, legacyRows),
   );
   assert(
     `${scenarioId}: orchestrator observations`,

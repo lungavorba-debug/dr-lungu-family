@@ -12,7 +12,7 @@ import { buildPremiumMeasurementRows } from '../report-measurement-interpretatio
 import { buildParticipantFindingLabels } from '../../clinical/participant-view/finding-labels';
 import { buildCampaignEventDisplay } from '../campaign-display';
 import { buildScreeningQuestionDisplayRows } from '../build-screening-question-display';
-import { buildCardiovascularEvaluationSummary } from '../report-cardiovascular-evaluation';
+import { buildDynamicEvaluationSummary } from '../build-dynamic-evaluation-summary';
 import { isEmptyMeasurementResult } from '../report-measurement-filter';
 import {
   DEFAULT_FINDINGS_SECTION_TITLE,
@@ -61,7 +61,7 @@ import type {
 import { buildPersonalizedParticipantRecommendations } from '../participant-recommendations';
 import { buildMergedReportRecommendations } from '../report-merged-recommendations';
 import { formatScreeningDateTime } from '../report-datetime';
-import { getParticipantDisplayName, getRiskLevelLabelRo } from '../report-personalization';
+import { getParticipantDisplayName } from '../report-personalization';
 import { buildStableReportNumber, resolveOperatorDisplayName } from '../report-number';
 import { buildReportSummaryLines } from '../report-summary';
 import { buildScreeningObservations } from '../report-screening-observations';
@@ -148,10 +148,11 @@ export function composeParticipantReport(
     participant: { gender: input.participant.gender },
   });
   const recommendationItems = buildMergedReportRecommendations(personalizedRecommendations);
-  const evaluationSummary = buildCardiovascularEvaluationSummary(
-    input.evaluation.risks.cardiovascular.level,
-    input.measurements,
-  );
+  const dynamicEvaluation = buildDynamicEvaluationSummary({
+    measurements: input.measurements,
+    anamnesis: input.anamnesis,
+    gender: input.participant.gender,
+  });
 
   return {
     schema_version: REPORT_SCHEMA_VERSION,
@@ -226,8 +227,8 @@ export function composeParticipantReport(
       ),
       cardiovascular_risk: {
         title: REPORT_SECTION_CARDIOVASCULAR_RISK,
-        level_label: getRiskLevelLabelRo(input.evaluation.risks.cardiovascular.level),
-        summary: evaluationSummary,
+        level_label: dynamicEvaluation.levelLabel,
+        summary: dynamicEvaluation.summary,
       },
       copy: {
         gdpr_text: REPORT_GDPR_TEXT,

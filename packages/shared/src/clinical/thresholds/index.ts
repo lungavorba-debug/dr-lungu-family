@@ -9,6 +9,7 @@ export const CLINICAL_THRESHOLDS = {
     urgentSystolic: 180,
     urgentDiastolic: 110,
     lowSystolic: 90,
+    lowDiastolic: 60,
   },
   pulse: {
     low: 60,
