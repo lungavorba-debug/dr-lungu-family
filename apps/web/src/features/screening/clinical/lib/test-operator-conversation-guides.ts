@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import type { ClinicalWarning } from '@medscreen/types';
 
@@ -10,6 +13,16 @@ import {
   resolveGuideKeyFromFactor,
   resolveGuideKeyFromWarning,
 } from './operator-conversation-guide-copy';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const tipComponentSource = readFileSync(
+  join(__dirname, '../components/OperatorConversationTip.tsx'),
+  'utf8',
+);
+
+assert.ok(!tipComponentSource.includes('<details'), 'Conversation tip must not use expandable details');
+assert.ok(!/apas[aă] pentru/i.test(tipComponentSource), 'Conversation tip must not require extra tap');
+assert.ok(tipComponentSource.includes('Spuneți participantului'), 'Conversation tip shows spoken line label');
 
 const ALL_KEYS = Object.keys(OPERATOR_CONVERSATION_GUIDES);
 
@@ -36,7 +49,7 @@ const pulseWarning: ClinicalWarning = {
   source_field: 'pulse',
 };
 assert.equal(resolveGuideKeyFromWarning(pulseWarning), 'abnormal_pulse');
-assert.ok(getGuideForWarning(pulseWarning)?.includes('puls'));
+assert.ok(getGuideForWarning(pulseWarning)?.includes('Puls'));
 
 const spo2Warning: ClinicalWarning = {
   code: 'operator_low_spo2',
@@ -45,6 +58,6 @@ const spo2Warning: ClinicalWarning = {
   source_field: 'oxygen_saturation',
 };
 assert.equal(resolveGuideKeyFromWarning(spo2Warning), 'low_spo2');
-assert.ok(getGuideForFactor('Tensiune diastolică ≥ 90 mmHg')?.includes('liniștit'));
+assert.ok(getGuideForFactor('Tensiune diastolică ≥ 90 mmHg')?.startsWith('Stați liniștit'));
 
 console.log('[test-operator-conversation-guides] All assertions passed.');

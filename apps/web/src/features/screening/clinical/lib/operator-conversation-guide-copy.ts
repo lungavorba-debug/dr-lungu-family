@@ -13,30 +13,30 @@ export type OperatorAlertGuideKey =
   | 'chest_pain'
   | 'dyspnea';
 
-/** Operator-only copy — never included in participant PDF/report. */
+/** Operator-only copy — direct lines to read aloud; never included in participant PDF/report. */
 export const OPERATOR_CONVERSATION_GUIDES: Record<OperatorAlertGuideKey, string> = {
   high_blood_pressure:
-    'Spune-i participantului să stea liniștit, valoarea e puțin ridicată azi; recomandă-i un control de rutină la medicul de familie zilele următoare.',
+    'Stați liniștit — tensiunea de azi e puțin ridicată. Vă recomandăm un control de rutină la medicul de familie zilele următoare.',
   high_glucose:
-    'Explică-i calm că valoarea de azi e peste medie, dar poate fi și de la ce a mâncat — recomandă-i o verificare pe nemâncate la medic.',
+    'Valorile de azi sunt puțin peste medie; poate fi și de la ce ați mâncat. Merită o verificare pe nemâncate la medic.',
   low_spo2:
-    'Menționează-i pe un ton liniștit că saturația a ieșit puțin sub normal și ar fi bine să discute cu un medic, mai ales dacă are și alte simptome respiratorii.',
+    'Saturația de oxigen a ieșit puțin sub normal. E bine să discutați cu un medic, mai ales dacă aveți și alte simptome respiratorii.',
   abnormal_pulse:
-    'Spune-i pe un ton calm că pulsul de azi e puțin diferit de obișnuit; recomandă-i o verificare de rutină la medic, mai ales dacă simte palpitații sau amețeli.',
+    'Pulsul de azi e puțin diferit de obișnuit. Recomandăm o verificare de rutină, mai ales dacă simțiți palpitații sau amețeli.',
   arrhythmia:
-    'Menționează-i calm că ritmul cardiac merită urmărit de un medic, mai ales dacă simte bătăi neregulate — nu e neapărat ceva grav, dar merită verificat.',
+    'Ritmul cardiac merită urmărit de un medic, mai ales dacă simțiți bătăi neregulate — nu e neapărat grav, dar merită verificat.',
   bmi:
-    'Explică-i fără teamă că greutatea de azi indică un surplus ușor — e un moment bun să discute cu medicul despre obiceiuri sănătoase, pas cu pas.',
+    'Greutatea de azi indică un surplus ușor. E un moment bun să discutați cu medicul despre obiceiuri sănătoase, pas cu pas.',
   smoking:
-    'Abordarea cu blândețe: mulțumește-i pentru sinceritate și sugerează-i că renunțarea la fumat, chiar treptat, aduce beneficii reale — poate discuta opțiuni cu medicul.',
+    'Mulțumim pentru sinceritate. Renunțarea la fumat, chiar treptat, aduce beneficii reale — puteți discuta opțiuni cu medicul.',
   known_diabetes:
-    'Spune-i că e bine că știe de diabet și că valorile de azi sunt un motiv bun pentru o discuție de rutină cu medicul, nu un motiv de panică.',
+    'E bine că știți de diabet. Valorile de azi sunt un motiv bun pentru o discuție de rutină cu medicul, nu un motiv de panică.',
   snoring:
-    'Explică-i pe îndelete că sforăitul poate afecta odihna — e util să discute cu medicul, există soluții simple care chiar ajută.',
+    'Sforăitul poate afecta odihna. E util să discutați cu medicul — există soluții simple care chiar ajută.',
   chest_pain:
-    'Rămâi calm și spune-i că e important să discute orice discomfort în piept cu un medic — chiar dacă azi se simte bine, merită o evaluare.',
+    'E important să discutați orice discomfort în piept cu un medic — chiar dacă vă simțiți bine azi, merită o evaluare.',
   dyspnea:
-    'Spune-i liniștit că lipsa de aer raportată merită atenție de la medic, mai ales dacă apare la efort — nu vrea să-l sperii, doar să-l încurajezi să ceară o evaluare.',
+    'Lipsa de aer raportată merită atenție de la medic, mai ales dacă apare la efort. Nu e un motiv de panică, dar merită o evaluare.',
 };
 
 const FACTOR_PATTERNS: Array<{ pattern: RegExp; key: OperatorAlertGuideKey }> = [
